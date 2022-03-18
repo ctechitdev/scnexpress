@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scnexpress/utility/my_constant.dart';
+import 'package:scnexpress/utility/my_dialog.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
+import 'package:scnexpress/widgets/show_image.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
@@ -11,6 +17,47 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
+  File? file;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkPermission();
+  }
+
+  Future<Null> checkPermission() async {
+    bool locationService;
+    LocationPermission locationPermission;
+
+    locationService = await Geolocator.isLocationServiceEnabled();
+    if (locationService) {
+      print('Service location is Open');
+
+      locationPermission = await Geolocator.checkPermission();
+      if (locationPermission == LocationPermission.denied) {
+        locationPermission = await Geolocator.requestPermission();
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'can not share location', 'please enable location');
+        } else {
+          // find latlng
+        }
+      } else {
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'can not share location', 'please enable location');
+        } else {
+          // find latlng
+
+        }
+      }
+    } else {
+      print('Service location CLose');
+      MyDialog().alertLocationService(
+          context, 'Location Service is closed', 'Please enable service');
+    }
+  }
 
 // call view
   @override
@@ -43,9 +90,52 @@ class _CreateAccountState extends State<CreateAccount> {
             buildPassword(size),
             buildTitle('picture'),
             buildSubTitle(),
+            buildAvatar(size),
           ],
         ),
       ),
+    );
+  }
+
+  Future<Null> chooseImage(ImageSource source) async {
+    try {
+      var result = await ImagePicker()
+          .getImage(source: source, maxHeight: 800, maxWidth: 800);
+      setState(() {
+        file = File(result!.path);
+      });
+    } catch (e) {}
+  }
+
+  Row buildAvatar(double size) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: () => chooseImage(ImageSource.camera),
+          icon: Icon(
+            Icons.add_a_photo,
+            size: 36,
+            color: MyConstant.dark,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 16),
+          width: size * 0.6,
+          child: file == null
+              ? ShowImage(path: MyConstant.image5)
+              : Image.file(file!),
+        ),
+        IconButton(
+          onPressed: () => chooseImage(ImageSource.gallery),
+          icon: Icon(
+            Icons.add_photo_alternate,
+            size: 36,
+            color: MyConstant.dark,
+          ),
+        ),
+      ],
     );
   }
 
