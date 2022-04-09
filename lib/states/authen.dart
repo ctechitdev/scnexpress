@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:scnexpress/models/user_model.dart';
 import 'package:scnexpress/utility/my_constant.dart';
+import 'package:scnexpress/utility/my_dialog.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
 import 'package:scnexpress/widgets/show_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authen extends StatefulWidget {
   const Authen({Key? key}) : super(key: key);
@@ -12,6 +18,9 @@ class Authen extends StatefulWidget {
 
 class _AuthenState extends State<Authen> {
   bool statusRedEye = true;
+  final formKey = GlobalKey<FormState>();
+  TextEditingController userController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +30,18 @@ class _AuthenState extends State<Authen> {
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
           behavior: HitTestBehavior.opaque,
-          child: ListView(
-            children: [
-              buildImage(size),
-              buildAppName(),
-              buildUser(size),
-              buildPassword(size),
-              buildLogin(size),
-              buildCreateAccount(),
-            ],
+          child: Form(
+            key: formKey,
+            child: ListView(
+              children: [
+                buildImage(size),
+                buildAppName(),
+                buildUser(size),
+                buildPassword(size),
+                buildLogin(size),
+                buildCreateAccount(),
+              ],
+            ),
           ),
         ),
       ),
@@ -62,12 +74,48 @@ class _AuthenState extends State<Authen> {
           width: size * 0.6,
           child: ElevatedButton(
             style: MyConstant().myButtonStyle(),
-            onPressed: () {},
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                String user = userController.text;
+                String password = passwordController.text;
+
+                print('user: is $user , password = $password');
+                checkAuthen(user: user, password: password);
+              }
+            },
             child: Text('Login'),
           ),
         ),
       ],
     );
+  }
+
+  Future<Null> checkAuthen({String? user, String? password}) async {
+    await Dio().post('http://192.168.1.9:8081/api/login', data: {
+      "loginuser": "$user",
+      "logpassword": "$password"
+    }).then((value) async {
+      print('print values API ==> $value');
+
+      if (value.toString() == 'no  user' ||
+          value.toString() == 'wrong password') {
+        MyDialog()
+            .normalDialog(context, 'Error', 'User or Password none correct');
+      } else {
+        //MyDialog().normalDialog(context, 'sucess', '$value');
+
+        for (var item in value.data) {
+          UserModel model = UserModel.fromMap(item);
+          String accesstoken = model.accessToken;
+          //MyDialog().normalDialog(context, 'sucess', '$accesstoken');
+          Navigator.pushNamedAndRemoveUntil(
+              context, MyConstant.routeRiderService, (route) => false);
+
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          preferences.setString('token', accesstoken);
+        }
+      }
+    });
   }
 
   Row buildUser(double size) {
@@ -78,6 +126,14 @@ class _AuthenState extends State<Authen> {
           margin: EdgeInsets.only(top: 16),
           width: size * 0.6,
           child: TextFormField(
+            controller: userController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please Fill User in blank';
+              } else {
+                return null;
+              }
+            },
             decoration: InputDecoration(
               labelStyle: MyConstant().h3Style(),
               labelText: 'User : ',
@@ -108,6 +164,14 @@ class _AuthenState extends State<Authen> {
           margin: EdgeInsets.only(top: 16),
           width: size * 0.6,
           child: TextFormField(
+            controller: passwordController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter Password';
+              } else {
+                return null;
+              }
+            },
             obscureText: statusRedEye,
             decoration: InputDecoration(
               suffixIcon: IconButton(

@@ -11,6 +11,7 @@ class MyConstant {
   static String routeRiderService = '/riderService';
   static String routeStaffService = '/staffServie';
   static String routeMerchantService = '/merchantService';
+  static String rountCheckRecieve = '/checkRecieve';
 
   // Image
 
@@ -38,10 +39,21 @@ class MyConstant {
         color: dark,
         fontWeight: FontWeight.w700,
       );
+  TextStyle h2WhiteStyle() => TextStyle(
+        fontSize: 18,
+        color: Colors.white,
+        fontWeight: FontWeight.w700,
+      );
 
   TextStyle h3Style() => TextStyle(
         fontSize: 14,
         color: dark,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle h3WhiteStyle() => TextStyle(
+        fontSize: 14,
+        color: Colors.white,
         fontWeight: FontWeight.normal,
       );
 
