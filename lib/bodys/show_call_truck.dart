@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:scnexpress/models/calltruck_model.dart';
+import 'package:scnexpress/utility/my_constant.dart';
+import 'package:scnexpress/widgets/Show_title.dart';
+import 'package:scnexpress/widgets/show_image.dart';
+import 'package:scnexpress/widgets/show_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowCallTruck extends StatefulWidget {
@@ -11,6 +15,10 @@ class ShowCallTruck extends StatefulWidget {
 }
 
 class _ShowCallTruckState extends State<ShowCallTruck> {
+  bool load = true;
+  bool? haveData;
+  List<CallTruckListModel> calltruckModel = [];
+
   @override
   void initState() {
     super.initState();
@@ -29,9 +37,25 @@ class _ShowCallTruckState extends State<ShowCallTruck> {
             }))
         .then((value) {
       // print('This is truck API VAL: $value');
-      for (var item in value.data) {
-        CallTruckListModel model = CallTruckListModel.fromMap(item);
-        print('List item Call ===> ${model.bill_header}');
+
+      if (value.toString() == 'null') {
+        // nodata
+        setState(() {
+          haveData = false;
+        });
+      } else {
+        // have data
+
+        for (var item in value.data) {
+          CallTruckListModel model = CallTruckListModel.fromMap(item);
+          print('List item Call ===> ${model.bill_header}');
+
+          setState(() {
+            load = false;
+            haveData = true;
+            calltruckModel.add(model);
+          });
+        }
       }
     });
   }
@@ -39,7 +63,65 @@ class _ShowCallTruckState extends State<ShowCallTruck> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text('This is Show Call Truck'),
+      body: load
+          ? ShowProgress()
+          : haveData!
+              ? LayoutBuilder(
+                  builder: (context, constraints) => buildListView(constraints),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShowTitle(
+                          title: 'No call Truck',
+                          textStyle: MyConstant().h1Style()),
+                      ShowTitle(
+                          title: 'no call truck to show',
+                          textStyle: MyConstant().h2Style())
+                    ],
+                  ),
+                ),
+    );
+  }
+
+  ListView buildListView(BoxConstraints constraints) {
+    return ListView.builder(
+      itemCount: calltruckModel.length,
+      itemBuilder: (context, index) => Card(
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(4),
+                  width: constraints.maxWidth * 0.5 - 4,
+                  height: constraints.maxHeight * 0.2,
+                  child: ShowImage(path: MyConstant.image1),
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(4),
+              width: constraints.maxWidth * 0.5 - 4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShowTitle(
+                      title: '${calltruckModel[index].bill_header} ',
+                      textStyle: MyConstant().h2Style()),
+                  ShowTitle(
+                      title:
+                          'Price ${calltruckModel[index].bill_total.toString()} KIP',
+                      textStyle: MyConstant().h3Style())
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
