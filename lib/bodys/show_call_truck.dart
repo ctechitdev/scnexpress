@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:scnexpress/models/calltruck_model.dart';
+import 'package:scnexpress/states/check_calltruck.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
 import 'package:scnexpress/widgets/show_image.dart';
@@ -31,7 +32,7 @@ class _ShowCallTruckState extends State<ShowCallTruck> {
     String tokenchar = preferences.getString('token')!;
 
     await Dio()
-        .post('http://192.168.1.9:8081/api/calltruck',
+        .post('http://192.168.0.205:8081/api/calltruck',
             options: Options(headers: <String, String>{
               'authorization': 'Bearer $tokenchar'
             }))
@@ -104,9 +105,12 @@ class _ShowCallTruckState extends State<ShowCallTruck> {
               ],
             ),
             Container(
+              margin: EdgeInsets.only(top: 10),
               padding: EdgeInsets.all(4),
               width: constraints.maxWidth * 0.5 - 4,
+              height: constraints.maxWidth * 0.4,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ShowTitle(
@@ -115,7 +119,35 @@ class _ShowCallTruckState extends State<ShowCallTruck> {
                   ShowTitle(
                       title:
                           'Price ${calltruckModel[index].bill_total.toString()} KIP',
-                      textStyle: MyConstant().h3Style())
+                      textStyle: MyConstant().h3Style()),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            print('Click check List Item');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CheckCallTruck(
+                                    callTruckListModel: calltruckModel[index],
+                                  ),
+                                ));
+                          },
+                          icon: Icon(
+                            Icons.check_box_outlined,
+                            size: 36,
+                            color: MyConstant.dark,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.delete_outline,
+                            size: 36,
+                            color: MyConstant.dark,
+                          )),
+                    ],
+                  )
                 ],
               ),
             )

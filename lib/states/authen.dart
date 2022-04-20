@@ -91,7 +91,7 @@ class _AuthenState extends State<Authen> {
   }
 
   Future<Null> checkAuthen({String? user, String? password}) async {
-    await Dio().post('http://192.168.1.9:8081/api/login', data: {
+    await Dio().post('http://192.168.0.205:8081/api/login', data: {
       "loginuser": "$user",
       "logpassword": "$password"
     }).then((value) async {
