@@ -1,3 +1,5 @@
 import 'package:flutter/material.dart';
 
-String register_api = 'http:localhost:8081/api/adduser';
+class BaseURL {
+  String urlapi = 'http://192.168.0.205:8081/api';
+}

@@ -32,7 +32,7 @@ class _ShowCallTruckState extends State<ShowCallTruck> {
     String tokenchar = preferences.getString('token')!;
 
     await Dio()
-        .post('http://192.168.0.205:8081/api/calltruck',
+        .post('${MyConstant.urlapi}/calltruck',
             options: Options(headers: <String, String>{
               'authorization': 'Bearer $tokenchar'
             }))

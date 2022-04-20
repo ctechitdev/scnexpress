@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MyConstant {
+  static String urlapi = 'http://192.168.0.205:8081/api';
   // General
   static String appName = 'SCNG Express';
   // Route

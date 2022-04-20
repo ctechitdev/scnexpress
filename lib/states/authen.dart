@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:scnexpress/models/user_model.dart';
+import 'package:scnexpress/utility/my_api.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/utility/my_dialog.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
@@ -91,7 +92,7 @@ class _AuthenState extends State<Authen> {
   }
 
   Future<Null> checkAuthen({String? user, String? password}) async {
-    await Dio().post('http://192.168.0.205:8081/api/login', data: {
+    await Dio().post('${MyConstant.urlapi}/login', data: {
       "loginuser": "$user",
       "logpassword": "$password"
     }).then((value) async {

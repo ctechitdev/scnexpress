@@ -27,7 +27,7 @@ class _CheckCallTruckState extends State<CheckCallTruck> {
   }
 
   Future<Null> loadListItemCallTruckAPI() async {
-    await Dio().post('http://192.168.0.205:8081/api/calltrucklistitem',
+    await Dio().post('${MyConstant.urlapi}/calltrucklistitem',
         data: {"billheader": "SCNHBR-2203100004"}).then((value) {
       // print('show list bill values ==> $value');
 
