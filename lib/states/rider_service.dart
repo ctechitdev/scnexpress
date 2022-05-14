@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scnexpress/bodys/Show_payment.dart';
 import 'package:scnexpress/bodys/show_call_item.dart';
+import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
 import 'package:scnexpress/bodys/show_call_truck.dart';
 import 'package:scnexpress/bodys/show_dashboard.dart';
 import 'package:scnexpress/utility/my_constant.dart';
@@ -16,6 +17,7 @@ class RiderService extends StatefulWidget {
 
 class _RiderServiceState extends State<RiderService> {
   List<Widget> widgets = [
+    showCallRidderNoneAccept(),
     ShowDashboard(),
     ShowCallTruck(),
     ShowCallItem(),
@@ -26,8 +28,7 @@ class _RiderServiceState extends State<RiderService> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
-        title: Text('Rider'),
+        title: Text('SCN Express'),
       ),
       drawer: Drawer(
         child: Stack(
@@ -36,10 +37,13 @@ class _RiderServiceState extends State<RiderService> {
             Column(
               children: [
                 UserAccountsDrawerHeader(accountName: null, accountEmail: null),
-                dashboard(),
-                orderRecive(),
-                orderSenditem(),
-                payment(),
+                requestCallRidder(),
+                requestCallRidderAccept(),
+                paymentCallridder(),
+                callItemTohome(),
+                checkItemCalltoHome(),
+                payCallitemRidder(),
+                printBill(),
               ],
             ),
           ],
@@ -49,7 +53,7 @@ class _RiderServiceState extends State<RiderService> {
     );
   }
 
-  ListTile dashboard() {
+  ListTile requestCallRidder() {
     return ListTile(
       onTap: () {
         setState(() {
@@ -57,19 +61,19 @@ class _RiderServiceState extends State<RiderService> {
           Navigator.pop(context);
         });
       },
-      leading: Icon(Icons.filter_1_outlined),
+      leading: Icon(Icons.moped_outlined),
       title: ShowTitle(
-        title: 'Dashboard',
+        title: 'ລາຍການເອີ້ນລົດ',
         textStyle: MyConstant().h2Style(),
       ),
       subtitle: ShowTitle(
-        title: 'sumary detail',
+        title: 'ລາຍການເອີ້ນລົດທີ່ບໍ່ໄດ້ຮັບ',
         textStyle: MyConstant().h3Style(),
       ),
     );
   }
 
-  ListTile orderRecive() {
+  ListTile requestCallRidderAccept() {
     return ListTile(
       onTap: () {
         setState(() {
@@ -77,19 +81,19 @@ class _RiderServiceState extends State<RiderService> {
           Navigator.pop(context);
         });
       },
-      leading: Icon(Icons.filter_1_outlined),
+      leading: Icon(Icons.ballot_outlined),
       title: ShowTitle(
-        title: 'Call Truck',
+        title: 'ກວດສອບສິນຄ້າເອີ້ນລົດ',
         textStyle: MyConstant().h2Style(),
       ),
       subtitle: ShowTitle(
-        title: 'sumary Call Truck',
+        title: 'ກວດສອບລາຍລະອຽດບິນທີ່ເອີ້ນຮັບລົດ',
         textStyle: MyConstant().h3Style(),
       ),
     );
   }
 
-  ListTile orderSenditem() {
+  ListTile paymentCallridder() {
     return ListTile(
       onTap: () {
         setState(() {
@@ -97,19 +101,19 @@ class _RiderServiceState extends State<RiderService> {
           Navigator.pop(context);
         });
       },
-      leading: Icon(Icons.filter_1_outlined),
+      leading: Icon(Icons.payments_outlined),
       title: ShowTitle(
-        title: 'Call Item',
+        title: 'ຊຳລະເງິນສົດເອີ້ນລົດ',
         textStyle: MyConstant().h2Style(),
       ),
       subtitle: ShowTitle(
-        title: 'Show Call Item',
+        title: 'ຊຳລະຄ່າຂົນສົ່ງ ແລະ ບໍລິການຮັບເຄື່ອງ',
         textStyle: MyConstant().h3Style(),
       ),
     );
   }
 
-  ListTile payment() {
+  ListTile callItemTohome() {
     return ListTile(
       onTap: () {
         setState(() {
@@ -117,13 +121,73 @@ class _RiderServiceState extends State<RiderService> {
           Navigator.pop(context);
         });
       },
-      leading: Icon(Icons.filter_1_outlined),
+      leading: Icon(Icons.account_balance_outlined),
       title: ShowTitle(
-        title: 'Payment',
+        title: 'ລາຍການສົ່ງສິນຄ້າ',
         textStyle: MyConstant().h2Style(),
       ),
       subtitle: ShowTitle(
-        title: 'List Payment',
+        title: 'ສະແດງລາຍການສົ່ງສິນຄ້າທີ່ບໍ່ໄດ້ກົດຮັບ',
+        textStyle: MyConstant().h3Style(),
+      ),
+    );
+  }
+
+  ListTile checkItemCalltoHome() {
+    return ListTile(
+      onTap: () {
+        setState(() {
+          indexWidget = 3;
+          Navigator.pop(context);
+        });
+      },
+      leading: Icon(Icons.home_work_outlined),
+      title: ShowTitle(
+        title: 'ກວດຄ່າສົງສິນຄ້າຮອດບ້ານ',
+        textStyle: MyConstant().h2Style(),
+      ),
+      subtitle: ShowTitle(
+        title: 'ສະແດງລາຍການຄ່າສົງສິນຄ້າຮອດບ້ານ',
+        textStyle: MyConstant().h3Style(),
+      ),
+    );
+  }
+
+  ListTile payCallitemRidder() {
+    return ListTile(
+      onTap: () {
+        setState(() {
+          indexWidget = 3;
+          Navigator.pop(context);
+        });
+      },
+      leading: Icon(Icons.payments_sharp),
+      title: ShowTitle(
+        title: 'ກວດຄ່າສົງສິນຄ້າຮອດບ້ານ',
+        textStyle: MyConstant().h2Style(),
+      ),
+      subtitle: ShowTitle(
+        title: 'ສະແດງລາຍການຄ່າສົງສິນຄ້າຮອດບ້ານ',
+        textStyle: MyConstant().h3Style(),
+      ),
+    );
+  }
+
+  ListTile printBill() {
+    return ListTile(
+      onTap: () {
+        setState(() {
+          indexWidget = 3;
+          Navigator.pop(context);
+        });
+      },
+      leading: Icon(Icons.local_print_shop_outlined),
+      title: ShowTitle(
+        title: 'ພິນບິນ',
+        textStyle: MyConstant().h2Style(),
+      ),
+      subtitle: ShowTitle(
+        title: 'ພິນບິນເອີ້ນລົດ ແລະ ສົ່ງສິນຄ້າ',
         textStyle: MyConstant().h3Style(),
       ),
     );
@@ -142,7 +206,7 @@ class _RiderServiceState extends State<RiderService> {
                       context, MyConstant.routeAuth, (route) => false),
                 );
           },
-          tileColor: Colors.orange.shade900,
+          tileColor: MyConstant.primary,
           leading: Icon(
             Icons.exit_to_app,
             size: 36,

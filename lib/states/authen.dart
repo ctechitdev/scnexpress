@@ -36,11 +36,11 @@ class _AuthenState extends State<Authen> {
             child: ListView(
               children: [
                 buildImage(size),
-                buildAppName(),
+                // buildAppName(),
                 buildUser(size),
                 buildPassword(size),
                 buildLogin(size),
-                buildCreateAccount(),
+                // buildCreateAccount(),
               ],
             ),
           ),
@@ -84,7 +84,7 @@ class _AuthenState extends State<Authen> {
                 checkAuthen(user: user, password: password);
               }
             },
-            child: Text('Login'),
+            child: Text('ລ໋ອກອິນ'),
           ),
         ),
       ],
@@ -98,10 +98,10 @@ class _AuthenState extends State<Authen> {
     }).then((value) async {
       print('print values API ==> $value');
 
-      if (value.toString() == 'no  user' ||
-          value.toString() == 'wrong password') {
+      if (value.toString() == 'ບໍ່ມີຜູ້ໃຊ້' ||
+          value.toString() == 'ລະຫັດຜ່ານບໍ່ຖືກ') {
         MyDialog()
-            .normalDialog(context, 'Error', 'User or Password none correct');
+            .normalDialog(context, 'Error', 'ຜູ້ໃຊ້ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ');
       } else {
         //MyDialog().normalDialog(context, 'sucess', '$value');
 
@@ -130,14 +130,14 @@ class _AuthenState extends State<Authen> {
             controller: userController,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please Fill User in blank';
+                return 'ກະລຸນາຕື່ມຂໍ້ມູນຜູ້ໃຊ້';
               } else {
                 return null;
               }
             },
             decoration: InputDecoration(
               labelStyle: MyConstant().h3Style(),
-              labelText: 'User : ',
+              labelText: 'ຜູ້ໃຊ້ : ',
               prefixIcon: Icon(
                 Icons.account_circle_outlined,
                 color: MyConstant.dark,
@@ -168,7 +168,7 @@ class _AuthenState extends State<Authen> {
             controller: passwordController,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter Password';
+                return 'ຕື່ມລະຫັດຜ່ານ';
               } else {
                 return null;
               }
@@ -192,7 +192,7 @@ class _AuthenState extends State<Authen> {
                       ),
               ),
               labelStyle: MyConstant().h3Style(),
-              labelText: 'Password  : ',
+              labelText: 'ລະຫັດຜ່ານ  : ',
               prefixIcon: Icon(
                 Icons.lock_outline,
                 color: MyConstant.dark,
@@ -229,9 +229,14 @@ class _AuthenState extends State<Authen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: size * 0.6,
-          child: ShowImage(path: MyConstant.image1),
-        ),
+            margin: EdgeInsets.only(top: size * 0.1),
+            width: size * 0.6,
+            child: CircleAvatar(
+              radius: 100,
+              backgroundImage:
+                  NetworkImage('http://149.129.55.90/scnexpress.jpg'),
+              backgroundColor: Colors.transparent,
+            )),
       ],
     );
   }
