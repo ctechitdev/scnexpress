@@ -3,7 +3,8 @@ import 'package:scnexpress/bodys/Show_payment.dart';
 import 'package:scnexpress/bodys/show_call_item.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
 import 'package:scnexpress/bodys/show_call_truck.dart';
-import 'package:scnexpress/bodys/show_dashboard.dart';
+import 'package:scnexpress/bodys/show_callitem_accept.dart';
+
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,7 @@ class RiderService extends StatefulWidget {
 class _RiderServiceState extends State<RiderService> {
   List<Widget> widgets = [
     showCallRidderNoneAccept(),
-    ShowDashboard(),
+    ShowAcceptCallItemRidder(),
     ShowCallTruck(),
     ShowCallItem(),
     ShowPayment()
@@ -28,7 +29,7 @@ class _RiderServiceState extends State<RiderService> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SCN Express'),
+        title: Text('ລາຍການເອີ້ນລົດ'),
       ),
       drawer: Drawer(
         child: Stack(
