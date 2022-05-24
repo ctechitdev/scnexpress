@@ -120,7 +120,7 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
                         builder: (context) => CheckEditItemCallRider(
                           listitemDetailModel: listitemnoacceptModel[index],
                         ),
-                      ));
+                      )).then((value) => ShowlistItemCallforChecking());
                 },
                 icon: Icon(
                   Icons.edit_outlined,

@@ -32,7 +32,7 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
     super.initState();
     callRidderNotAcceptModel = widget.callRidderNotAcceptModel;
 
-    print('data bill header is => ${callRidderNotAcceptModel!.bill_header}');
+    // print('data bill header is => ${callRidderNotAcceptModel!.bill_header}');
     Listitembillheader();
   }
 
