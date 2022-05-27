@@ -36,6 +36,10 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
   }
 
   Future<Null> ShowlistItemCallforChecking() async {
+    if (listitemnoacceptModel.length != 0) {
+      listitemnoacceptModel.clear();
+    }
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String tokenridder = preferences.getString('token')!;
     await Dio()
@@ -67,17 +71,37 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ລາຍການສິນຄ້າເພື່ອກວດສອບ'),
-      ),
-      body: load
-          ? ShowProgress()
-          : haveData!
-              ? LayoutBuilder(
-                  builder: (context, constraints) => buildListView(constraints),
-                )
-              : Text('No data'),
-    );
+        appBar: AppBar(
+          title: Text('ລາຍການສິນຄ້າເພື່ອກວດສອບ'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) => buildListView(constraints),
+              ),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  updateToPrepayCallTruck();
+                  Navigator.pop(context);
+                },
+                child: Text('ຢືນຢັນການກວດສອບ'))
+          ],
+        ));
+  }
+
+  Future<Null> updateToPrepayCallTruck() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String tokenridder = preferences.getString('token')!;
+    await Dio()
+        .post('${MyConstant.urlapi}/confirmcheckcalltruck',
+            data: {"bheader": "${acceptcalltruckModel!.bill_header}"},
+            options: Options(headers: <String, String>{
+              'authorization': 'Bearer $tokenridder'
+            }))
+        .then((value) => print('$value'));
   }
 
   ListView buildListView(BoxConstraints constraints) {

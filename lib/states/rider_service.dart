@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:scnexpress/bodys/Show_payment.dart';
 import 'package:scnexpress/bodys/show_call_item.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
-import 'package:scnexpress/bodys/show_call_truck.dart';
 import 'package:scnexpress/bodys/show_callitem_accept.dart';
+import 'package:scnexpress/bodys/show_prepayment_calltruck.dart';
 
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
@@ -20,7 +20,7 @@ class _RiderServiceState extends State<RiderService> {
   List<Widget> widgets = [
     showCallRidderNoneAccept(),
     ShowAcceptCallItemRidder(),
-    ShowCallTruck(),
+    ShowListCalltruckForPayByRidder(),
     ShowCallItem(),
     ShowPayment()
   ];
@@ -29,7 +29,7 @@ class _RiderServiceState extends State<RiderService> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ລາຍການເອີ້ນລົດ'),
+        title: Text('SCN Ridder'),
       ),
       drawer: Drawer(
         child: Stack(
@@ -214,11 +214,11 @@ class _RiderServiceState extends State<RiderService> {
             color: Colors.white,
           ),
           title: ShowTitle(
-            title: 'Sign Out',
+            title: 'ອອກລະບົບ',
             textStyle: MyConstant().h2WhiteStyle(),
           ),
           subtitle: ShowTitle(
-            title: 'Sign Out And To Login',
+            title: 'ອອກລະບົບ',
             textStyle: MyConstant().h3WhiteStyle(),
           ),
         ),
