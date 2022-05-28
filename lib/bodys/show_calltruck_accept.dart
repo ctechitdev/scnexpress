@@ -39,7 +39,7 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
               'authorization': 'Bearer $tokenridder'
             }))
         .then((value) {
-      if (value.toString() == 'null') {
+      if (value.toString() == 'no item') {
         setState(() {
           load = false;
           haveData = false;
@@ -69,7 +69,20 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
               ? LayoutBuilder(
                   builder: (context, constraints) => buildListView(constraints),
                 )
-              : Text('nodata'),
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShowTitle(
+                        title: 'ບໍມີລາຍການຮັບອໍເດີ້ເອີ້ນລົດ',
+                        textStyle: MyConstant().h1Style(),
+                      ),
+                      ShowTitle(
+                          title: 'ກະລຸນາກວດສອບຫນ້າຮັບເອີ້ນລົດ',
+                          textStyle: MyConstant().h2Style())
+                    ],
+                  ),
+                ),
     );
   }
 

@@ -36,7 +36,7 @@ class _showCallRidderNoneAcceptState extends State<showCallRidderNoneAccept> {
               'authorization': 'Bearere $tokenRidder'
             }))
         .then((value) {
-      if (value.toString() == 'null') {
+      if (value.toString() == 'no item') {
         setState(() {
           load = false;
           haveData = false;
@@ -45,7 +45,7 @@ class _showCallRidderNoneAcceptState extends State<showCallRidderNoneAccept> {
         for (var item in value.data) {
           CallRidderNotAcceptModel model =
               CallRidderNotAcceptModel.fromMap(item);
-          print('show Item =>>  ${model.bill_header}');
+          //  print('show Item =>>  ${model.bill_header}');
 
           setState(() {
             load = false;

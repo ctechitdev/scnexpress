@@ -40,7 +40,7 @@ class _ShowListCalltruckForPayByRidderState
               'authorization': 'Bearer $tokenrider'
             }))
         .then((value) {
-      if (value.toString() == 'null') {
+      if (value.toString() == 'no data to show') {
         setState(() {
           load = false;
           haveData = false;
@@ -69,7 +69,20 @@ class _ShowListCalltruckForPayByRidderState
               ? LayoutBuilder(
                   builder: (context, constraints) => buildListView(constraints),
                 )
-              : Text('no data'),
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShowTitle(
+                        title: 'ບໍມີລາຍການກວດສອບສິນຄ້າພ້ອມເອີ້ນລົດ',
+                        textStyle: MyConstant().h1Style(),
+                      ),
+                      ShowTitle(
+                          title: 'ກະລຸນາກວດສອບຫນ້າກວດສອບສິນຄ້າ ແລະ ເອີ້ນລົດ',
+                          textStyle: MyConstant().h2Style())
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -98,8 +111,7 @@ class _ShowListCalltruckForPayByRidderState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ShowTitle(
-                      title:
-                          'xxເລກຫົວບິນ: ${listprepayModel[index].bill_header}',
+                      title: 'ເລກຫົວບິນ: ${listprepayModel[index].bill_header}',
                       textStyle: MyConstant().h2Style()),
                   ShowTitle(
                       title:
@@ -118,7 +130,7 @@ class _ShowListCalltruckForPayByRidderState
                                     listprepaycalltruckModel:
                                         listprepayModel[index],
                                   ),
-                                )).then((value) => loadListforpayCalltruck());
+                                ));
                           },
                           icon: Icon(
                             Icons.playlist_add_check_outlined,

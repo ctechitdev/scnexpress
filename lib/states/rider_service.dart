@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:scnexpress/bodys/Show_payment.dart';
 import 'package:scnexpress/bodys/show_call_item.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
-import 'package:scnexpress/bodys/show_callitem_accept.dart';
+import 'package:scnexpress/bodys/show_calltruck_accept.dart';
+import 'package:scnexpress/bodys/show_callitem_noaccept.dart';
 import 'package:scnexpress/bodys/show_prepayment_calltruck.dart';
 
 import 'package:scnexpress/utility/my_constant.dart';
@@ -21,7 +22,7 @@ class _RiderServiceState extends State<RiderService> {
     showCallRidderNoneAccept(),
     ShowAcceptCallItemRidder(),
     ShowListCalltruckForPayByRidder(),
-    ShowCallItem(),
+    showListCallItemNoaccept(),
     ShowPayment()
   ];
   int indexWidget = 0;
