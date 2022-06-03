@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scnexpress/bodys/Show_payment.dart';
+import 'package:scnexpress/bodys/prepay_callitem.dart';
 import 'package:scnexpress/bodys/show_call_item.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
+import 'package:scnexpress/bodys/show_callitem_accept.dart';
 import 'package:scnexpress/bodys/show_calltruck_accept.dart';
 import 'package:scnexpress/bodys/show_callitem_noaccept.dart';
 import 'package:scnexpress/bodys/show_prepayment_calltruck.dart';
@@ -23,7 +25,8 @@ class _RiderServiceState extends State<RiderService> {
     ShowAcceptCallItemRidder(),
     ShowListCalltruckForPayByRidder(),
     showListCallItemNoaccept(),
-    ShowPayment()
+    showListCallItemAcepted(),
+    prepaycallitempage(),
   ];
   int indexWidget = 0;
   @override
@@ -139,7 +142,7 @@ class _RiderServiceState extends State<RiderService> {
     return ListTile(
       onTap: () {
         setState(() {
-          indexWidget = 3;
+          indexWidget = 4;
           Navigator.pop(context);
         });
       },
@@ -159,17 +162,17 @@ class _RiderServiceState extends State<RiderService> {
     return ListTile(
       onTap: () {
         setState(() {
-          indexWidget = 3;
+          indexWidget = 5;
           Navigator.pop(context);
         });
       },
       leading: Icon(Icons.payments_sharp),
       title: ShowTitle(
-        title: 'ກວດຄ່າສົງສິນຄ້າຮອດບ້ານ',
+        title: 'ຊຳລະເອີ້ນສິນຄ້າ',
         textStyle: MyConstant().h2Style(),
       ),
       subtitle: ShowTitle(
-        title: 'ສະແດງລາຍການຄ່າສົງສິນຄ້າຮອດບ້ານ',
+        title: 'ສະແດງລາຍການຊຳລະເອີ້ນສິນຄ້າ',
         textStyle: MyConstant().h3Style(),
       ),
     );

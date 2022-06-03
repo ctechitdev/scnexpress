@@ -27,6 +27,10 @@ class _showListCallItemNoacceptState extends State<showListCallItemNoaccept> {
   }
 
   Future<Null> showCallItemNoaccept() async {
+    if (showlistcallitemnoacceptModel.length != 0) {
+      showlistcallitemnoacceptModel.clear();
+    }
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String tokenrider = preferences.getString('token')!;
 
@@ -36,7 +40,7 @@ class _showListCallItemNoacceptState extends State<showListCallItemNoaccept> {
               'authorization': 'Bearer $tokenrider'
             }))
         .then((value) {
-      if (value.toString() == 'no data') {
+      if (value.toString() == 'no data show') {
         setState(() {
           load = false;
           haveData = false;
@@ -64,7 +68,20 @@ class _showListCallItemNoacceptState extends State<showListCallItemNoaccept> {
               ? LayoutBuilder(
                   builder: (context, constraints) => BuildListView(constraints),
                 )
-              : Text('no have'),
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShowTitle(
+                        title: 'ບໍມີລາຍການເອີ້ນສິນຄ້າສົງຮອດເຮືອນ',
+                        textStyle: MyConstant().h1Style(),
+                      ),
+                      ShowTitle(
+                          title: 'ກະລຸນາລໍຖ້າລູກຄ້າໃຊ່້ບໍລິການສົ່ງເຄື່ອງ',
+                          textStyle: MyConstant().h2Style())
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -113,7 +130,7 @@ class _showListCallItemNoacceptState extends State<showListCallItemNoaccept> {
                                     listcallitemnoacceptModel:
                                         showlistcallitemnoacceptModel[index],
                                   ),
-                                ));
+                                )).then((value) => showCallItemNoaccept());
                           },
                           icon: Icon(
                             Icons.moped_outlined,

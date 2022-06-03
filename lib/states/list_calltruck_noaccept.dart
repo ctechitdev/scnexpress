@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:scnexpress/models/listitem_noaccept_model.dart';
+import 'package:scnexpress/models/location_calltruck_model.dart';
 import 'package:scnexpress/models/show_callrider_notaccept_model.dart';
 import 'package:scnexpress/states/rider_service.dart';
 import 'package:scnexpress/utility/my_constant.dart';
@@ -25,6 +28,8 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
   bool load = true;
   bool? haveData;
   List<ListItemNoAcceptModel> listitemnoacceptModel = [];
+  List<locationCallRidderModel> arrayLocationModel = [];
+  double? lat, lng;
 
   @override
   void initState() {
@@ -34,6 +39,7 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
 
     // print('data bill header is => ${callRidderNotAcceptModel!.bill_header}');
     Listitembillheader();
+    checkperlicaion();
   }
 
   Future<Null> Listitembillheader() async {
@@ -55,7 +61,7 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
       } else {
         for (var item in value.data) {
           ListItemNoAcceptModel model = ListItemNoAcceptModel.fromMap(item);
-          print(' this is invoice item list ${model.bill_code}');
+          // print(' this is invoice item list ${model.bill_code}');
           setState(() {
             load = false;
             haveData = true;
@@ -64,6 +70,77 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
         }
       }
     });
+  }
+
+  Future<Null> findLocation() async {
+    print('find location work');
+    Position? position = await findPosition();
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String tokenridder = preferences.getString('token')!;
+
+    await Dio()
+        .post('${MyConstant.urlapi}/locatecalltruck',
+            data: {"billheaderid": "SCNHBR-2206030011"},
+            options: Options(headers: <String, String>{
+              'authorization': 'Beaer $tokenridder'
+            }))
+        .then((value) {
+      for (var item in value.data) {
+        locationCallRidderModel model = locationCallRidderModel.fromMap(item);
+        arrayLocationModel.add(model);
+
+        setState(() {
+          lat = model.landx;
+          lng = model.landy;
+
+          print('lat ==> $lat ===> long $lng');
+        });
+      }
+    });
+  }
+
+  Future<Position?> findPosition() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+      return position;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Null> checkperlicaion() async {
+    bool locationService;
+    LocationPermission locationPermission;
+    locationService = await Geolocator.isLocationServiceEnabled();
+
+    if (locationService) {
+      locationPermission = await Geolocator.checkPermission();
+      if (locationPermission == LocationPermission.denied) {
+        locationPermission = await Geolocator.requestPermission();
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'ເປີດສິດນຳໃຊ້', 'ກະລຸນາເປີດນຳໃຊ້ສະຖານທີ');
+        } else {
+          //findlocation
+          findLocation();
+        }
+      } else {
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'ເປີດສິດນຳໃຊ້', 'ກະລຸນາເປີດນຳໃຊ້ສະຖານທີ');
+        } else {
+          //finlocation
+          findLocation();
+        }
+      }
+      // print('Service location is Open');
+    } else {
+      //  print('Location service not open');
+      MyDialog().alertLocationService(
+          context, 'ສິດເຂົ້າເຖິງທີ່ຢູ່', 'ກະລຸນາເປີດທີ່ຢູ່ໂທສັບ');
+    }
   }
 
   Future<Null> ridderAcceptItem() async {
@@ -160,6 +237,7 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
                 },
               ),
             ),
+            buildMap(),
             ElevatedButton(
                 onPressed: () {
                   ridderAcceptItem();
@@ -175,4 +253,29 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
       ),
     );
   }
+
+  Set<Marker> setMarker() => <Marker>[
+        Marker(
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          infoWindow: InfoWindow(
+              title: 'ທີ່ຢູ່ລູກຄ້າ', snippet: 'lat = $lat, lng = $lng'),
+        )
+      ].toSet();
+
+  Widget buildMap() => Container(
+        color: MyConstant.dark,
+        width: double.infinity,
+        height: 200,
+        child: lat == null
+            ? ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+              ),
+      );
 }

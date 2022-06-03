@@ -1,59 +1,57 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:scnexpress/models/accept_callitem_model.dart';
-import 'package:scnexpress/states/show_detail_accept_calltruck.dart';
+import 'package:scnexpress/models/list_callitem_prepay_model.dart';
+import 'package:scnexpress/states/list_callitem_detail_prepay.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
 import 'package:scnexpress/widgets/show_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ShowAcceptCallItemRidder extends StatefulWidget {
-  const ShowAcceptCallItemRidder({Key? key}) : super(key: key);
+class prepaycallitempage extends StatefulWidget {
+  const prepaycallitempage({Key? key}) : super(key: key);
 
   @override
-  State<ShowAcceptCallItemRidder> createState() =>
-      _ShowAcceptCallItemRidderState();
+  State<prepaycallitempage> createState() => _prepaycallitempageState();
 }
 
-class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
+class _prepaycallitempageState extends State<prepaycallitempage> {
   bool load = true;
   bool? haveData;
-  List<AcceptCallTruckList> acceptcallModel = [];
+  List<listCallItemPrepayModel> arraylistcallitemprepay = [];
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    showListAcceptCallitem();
+    showlistCallItemPrepayment();
   }
 
-  Future<Null> showListAcceptCallitem() async {
-    if (acceptcallModel.length != 0) {
-      acceptcallModel.clear();
+  Future<Null> showlistCallItemPrepayment() async {
+    if (arraylistcallitemprepay.length != 0) {
+      arraylistcallitemprepay.clear();
     }
-
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String tokenridder = preferences.getString('token')!;
+    String tokenrider = preferences.getString('token')!;
+    print('this test data');
     await Dio()
-        .post('${MyConstant.urlapi}/listcalltruckaccepted',
+        .post('${MyConstant.urlapi}/showlistcallitemprepay',
             options: Options(headers: <String, String>{
-              'authorization': 'Bearer $tokenridder'
+              'authorization': 'Bearer $tokenrider'
             }))
         .then((value) {
-      if (value.toString() == 'no item') {
+      if (value.toString() == 'no data show') {
         setState(() {
           load = false;
           haveData = false;
         });
+        print('$value');
       } else {
-        //  print('this is list bill accespt=> $value');
-
         for (var item in value.data) {
-          AcceptCallTruckList model = AcceptCallTruckList.fromMap(item);
-          //  print('List accept===> ${model.bill_header}');
+          listCallItemPrepayModel model = listCallItemPrepayModel.fromMap(item);
           setState(() {
             load = false;
             haveData = true;
-            acceptcallModel.add(model);
+            arraylistcallitemprepay.add(model);
           });
         }
       }
@@ -74,11 +72,11 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ShowTitle(
-                        title: 'ບໍມີລາຍການຮັບອໍເດີ້ເອີ້ນລົດ',
+                        title: 'ບໍມີລາຍການເພື່ອຊຳລະເອີ້ນສິນຄ້າ',
                         textStyle: MyConstant().h1Style(),
                       ),
                       ShowTitle(
-                          title: 'ກະລຸນາກວດສອບຫນ້າຮັບເອີ້ນລົດ',
+                          title: 'ກະລູນາກວດສອບລາຍການກວດສອບເອີ້ນສິນຄ້າ',
                           textStyle: MyConstant().h2Style())
                     ],
                   ),
@@ -88,7 +86,7 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
 
   ListView buildListView(BoxConstraints constraints) {
     return ListView.builder(
-      itemCount: acceptcallModel.length,
+      itemCount: arraylistcallitemprepay.length,
       itemBuilder: (context, index) => Card(
         child: Row(
           children: [
@@ -99,7 +97,7 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
               child: CircleAvatar(
                 radius: 100,
                 backgroundColor: MyConstant.dark,
-                child: const Text('ລຳດັບທີ'),
+                child: Text('ລຳດັບທີ'),
               ),
             ),
             Container(
@@ -112,11 +110,12 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ShowTitle(
-                      title: 'ເລກຫົວບິນ: ${acceptcallModel[index].bill_header}',
+                      title:
+                          'ບິນເລກທີ: ${arraylistcallitemprepay[index].inv_id}',
                       textStyle: MyConstant().h2Style()),
                   ShowTitle(
                       title:
-                          'ລາຄາລວມ: ${acceptcallModel[index].bill_total.toString()} ກີບ',
+                          'ລາຄາ: ${arraylistcallitemprepay[index].inv_total.toString()}',
                       textStyle: MyConstant().h2Style()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -124,26 +123,18 @@ class _ShowAcceptCallItemRidderState extends State<ShowAcceptCallItemRidder> {
                       IconButton(
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ShowListCallItemForCheck(
-                                    acceptcalltrucklistModel:
-                                        acceptcallModel[index],
-                                  ),
-                                )).then((value) => showListAcceptCallitem());
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          listCallItemDetailPrepay(
+                                        invoiceParentID:
+                                            arraylistcallitemprepay[index],
+                                      ),
+                                    ))
+                                .then((value) => showlistCallItemPrepayment());
                           },
                           icon: Icon(
-                            Icons.playlist_add_check_outlined,
-                            size: 36,
-                            color: MyConstant.dark,
-                          )),
-                      IconButton(
-                          onPressed: () {
-                            //      print(  'cancel bill header to no accept is ${acceptcallModel[index].bill_header}');
-                          },
-                          icon: Icon(
-                            Icons.auto_delete_outlined,
+                            Icons.moped_outlined,
                             size: 36,
                             color: MyConstant.dark,
                           )),

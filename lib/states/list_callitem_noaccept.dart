@@ -63,6 +63,19 @@ class _ListCallItemNoRidderAcceptState
     });
   }
 
+  Future<Null> recieveCalItemOrder() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String tokenrider = preferences.getString('token')!;
+
+    await Dio()
+        .post('${MyConstant.urlapi}/acceptcallitem',
+            data: {"billinvoice": "${listItemcallNoacceptModel!.inv_id}"},
+            options: Options(headers: <String, String>{
+              'authorization': 'Bearer $tokenrider'
+            }))
+        .then((value) => Navigator.pop(context));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,9 +101,8 @@ class _ListCallItemNoRidderAcceptState
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
-              child: Text('ຮັບລາຍການເອີ້ນເຄື່ອງ'),
-            )
+                onPressed: () => recieveCalItemOrder(),
+                child: Text('ຮັບລາຍການເອີ້ນເຄື່ອງ'))
           ],
         ),
       ),
