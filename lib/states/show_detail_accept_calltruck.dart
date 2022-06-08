@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:scnexpress/function/maps_utils.dart';
 import 'package:scnexpress/models/accept_callitem_model.dart';
 import 'package:scnexpress/models/listitem_calltruckcheck.dart';
 import 'package:scnexpress/models/listitem_noaccept_model.dart';
+import 'package:scnexpress/models/location_calltruck_model.dart';
 import 'package:scnexpress/states/editcheckitemcallridder.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
@@ -25,6 +28,8 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
   bool load = true;
   bool? haveData;
   List<ListItemNoAcceptModel> listitemnoacceptModel = [];
+  List<locationCallRidderModel> arrayLocationModel = [];
+  double? lat, lng;
 
   @override
   void initState() {
@@ -33,6 +38,7 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
     // print(  'item for list check bill id ==> ${acceptcalltruckModel!.bill_header}');
 
     ShowlistItemCallforChecking();
+    findLatlng();
   }
 
   Future<Null> ShowlistItemCallforChecking() async {
@@ -57,11 +63,47 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
       } else {
         for (var item in value.data) {
           ListItemNoAcceptModel model = ListItemNoAcceptModel.fromMap(item);
-          print('this is model item ${model.bill_code}');
+          // print('this is model item ${model.bill_code}');
           setState(() {
             load = false;
             haveData = true;
             listitemnoacceptModel.add(model);
+          });
+        }
+      }
+    });
+  }
+
+  Future<Null> findLatlng() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String tokenrider = preferences.getString('token')!;
+
+    await Dio()
+        .post('${MyConstant.urlapi}/locatecalltruck',
+            data: {"billheaderid": "${acceptcalltruckModel!.bill_header}"},
+            options: Options(headers: <String, String>{
+              'authorization': 'Bearer $tokenrider'
+            }))
+        .then((value) {
+      if (value.toString() == 'null') {
+        setState(() {
+          load = false;
+          haveData = false;
+        });
+      } else {
+        for (var item in value.data) {
+          locationCallRidderModel model = locationCallRidderModel.fromMap(item);
+          setState(() {
+            load = false;
+            haveData = true;
+            arrayLocationModel.add(model);
+            setState(() {
+              load = false;
+              haveData = true;
+              lat = model.landx;
+              lng = model.landy;
+              //print('accept lat ==> $lat ===> long $lng');
+            });
           });
         }
       }
@@ -82,6 +124,7 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
                 builder: (context, constraints) => buildListView(constraints),
               ),
             ),
+            buildMap(),
             ElevatedButton(
                 onPressed: () {
                   updateToPrepayCallTruck();
@@ -91,6 +134,34 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
           ],
         ));
   }
+
+  Set<Marker> setMarker() => <Marker>[
+        Marker(
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          infoWindow: InfoWindow(title: 'ທີ່ຢູ່ບ່ອນນີ້', snippet: 'ບ່ອນນີ້'),
+        )
+      ].toSet();
+
+  Widget buildMap() => Container(
+        color: Colors.grey,
+        width: double.infinity,
+        height: 200,
+        child: lat == null
+            ? ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                myLocationEnabled: true,
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+                onTap: (argument) {
+                  MapUtils.openMap(lat!, lng!);
+                },
+              ),
+      );
 
   Future<Null> updateToPrepayCallTruck() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

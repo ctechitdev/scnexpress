@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:scnexpress/function/maps_utils.dart';
 import 'package:scnexpress/models/list_callitem_detail_model.dart';
 import 'package:scnexpress/models/list_callitem_noaccept_model.dart';
+import 'package:scnexpress/models/location_calltruck_model.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
+import 'package:scnexpress/widgets/show_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListCallItemNoRidderAccept extends StatefulWidget {
@@ -24,6 +28,8 @@ class _ListCallItemNoRidderAcceptState
   bool load = true;
   bool? haveData;
   List<callItemToHomeDetailListModel> arrayCallItemList = [];
+  List<locationCallRidderModel> arrayLocationModel = [];
+  double? lat, lng;
 
   @override
   void initState() {
@@ -31,6 +37,7 @@ class _ListCallItemNoRidderAcceptState
     super.initState();
     listItemcallNoacceptModel = widget.listcallitemnoacceptModel;
     listCallItemDetail();
+    findlatlng();
   }
 
   Future<Null> listCallItemDetail() async {
@@ -57,6 +64,37 @@ class _ListCallItemNoRidderAcceptState
             load = false;
             haveData = true;
             arrayCallItemList.add(model);
+          });
+        }
+      }
+    });
+  }
+
+  Future<Null> findlatlng() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String tokenrider = preferences.getString('token')!;
+
+    await Dio()
+        .post('${MyConstant.urlapi}/locatecalltruck',
+            data: {"billheaderid": "${listItemcallNoacceptModel!.inv_id}"},
+            options: Options(headers: <String, String>{
+              'authorization': 'Bearer $tokenrider'
+            }))
+        .then((value) {
+      if (value.toString() == 'null') {
+        setState(() {
+          load = false;
+          haveData = false;
+        });
+      } else {
+        for (var item in value.data) {
+          locationCallRidderModel model = locationCallRidderModel.fromMap(item);
+          arrayLocationModel.add(model);
+          setState(() {
+            load = false;
+            haveData = true;
+            lat = model.landx;
+            lng = model.landy;
           });
         }
       }
@@ -100,6 +138,7 @@ class _ListCallItemNoRidderAcceptState
                 builder: (context, constraints) => buildListView(constraints),
               ),
             ),
+            buildMap(),
             ElevatedButton(
                 onPressed: () => recieveCalItemOrder(),
                 child: Text('ຮັບລາຍການເອີ້ນເຄື່ອງ'))
@@ -108,6 +147,34 @@ class _ListCallItemNoRidderAcceptState
       ),
     );
   }
+
+  Set<Marker> setMarker() => <Marker>[
+        Marker(
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          infoWindow:
+              InfoWindow(title: 'ທີ່ຢູ່ລູກຄ້າ', snippet: 'ທີ່ຢູ່ລູກຄ້າ'),
+        )
+      ].toSet();
+
+  Widget buildMap() => Container(
+        width: double.infinity,
+        height: 200,
+        child: lat == null
+            ? ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                myLocationEnabled: true,
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+                onTap: (argument) {
+                  MapUtils.openMap(lat!, lng!);
+                },
+              ),
+      );
 
   ListView buildListView(BoxConstraints constraints) {
     return ListView.builder(

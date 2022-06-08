@@ -11,6 +11,7 @@ import 'package:scnexpress/utility/my_dialog.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
 import 'package:scnexpress/widgets/show_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ListCalltruckNoAccept extends StatefulWidget {
   final CallRidderNotAcceptModel callRidderNotAcceptModel;
@@ -30,6 +31,9 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
   List<ListItemNoAcceptModel> listitemnoacceptModel = [];
   List<locationCallRidderModel> arrayLocationModel = [];
   double? lat, lng;
+
+  final Set<Polyline> polyline = {};
+  //List<LatLng> routeCoords;
 
   @override
   void initState() {
@@ -73,7 +77,7 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
   }
 
   Future<Null> findLocation() async {
-    print('find location work');
+    //print('find location work');
     Position? position = await findPosition();
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -81,7 +85,7 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
 
     await Dio()
         .post('${MyConstant.urlapi}/locatecalltruck',
-            data: {"billheaderid": "SCNHBR-2206030011"},
+            data: {"billheaderid": "${callRidderNotAcceptModel!.bill_header}"},
             options: Options(headers: <String, String>{
               'authorization': 'Beaer $tokenridder'
             }))
@@ -91,10 +95,12 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
         arrayLocationModel.add(model);
 
         setState(() {
+          load = false;
+          haveData = true;
           lat = model.landx;
           lng = model.landy;
 
-          print('lat ==> $lat ===> long $lng');
+          // print('lat ==> $lat ===> long $lng');
         });
       }
     });
@@ -274,8 +280,23 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
                   target: LatLng(lat!, lng!),
                   zoom: 16,
                 ),
+                myLocationEnabled: true,
                 onMapCreated: (controller) {},
                 markers: setMarker(),
+                onTap: (argument) {
+                  openMap(lat!, lng!);
+                },
               ),
       );
+
+  Future<Null> openMap(double Latitude, double Longitude) async {
+    String googleMapURL =
+        "https://www.google.com/maps/search/?api=1&query=$Latitude,$Longitude";
+
+    if (await canLaunch(googleMapURL)) {
+      await launch(googleMapURL);
+    } else {
+      throw 'can not open map';
+    }
+  }
 }
