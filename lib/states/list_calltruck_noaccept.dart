@@ -90,18 +90,25 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
               'authorization': 'Beaer $tokenridder'
             }))
         .then((value) {
-      for (var item in value.data) {
-        locationCallRidderModel model = locationCallRidderModel.fromMap(item);
-        arrayLocationModel.add(model);
-
+      if (value.toString() == 'no data show') {
         setState(() {
           load = false;
-          haveData = true;
-          lat = model.landx;
-          lng = model.landy;
-
-          // print('lat ==> $lat ===> long $lng');
+          haveData = false;
         });
+      } else {
+        for (var item in value.data) {
+          locationCallRidderModel model = locationCallRidderModel.fromMap(item);
+          arrayLocationModel.add(model);
+
+          setState(() {
+            load = false;
+            haveData = true;
+            lat = model.landx;
+            lng = model.landy;
+
+            // print('lat ==> $lat ===> long $lng');
+          });
+        }
       }
     });
   }
