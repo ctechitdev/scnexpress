@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scnexpress/bodys/Show_payment.dart';
 import 'package:scnexpress/bodys/map_calltruck.dart';
 import 'package:scnexpress/bodys/prepay_callitem.dart';
+import 'package:scnexpress/bodys/printertest.dart';
 import 'package:scnexpress/bodys/show_call_item.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
 import 'package:scnexpress/bodys/show_callitem_accept.dart';
@@ -28,6 +29,7 @@ class _RiderServiceState extends State<RiderService> {
     showListCallItemNoaccept(),
     showListCallItemAcepted(),
     prepaycallitempage(),
+    printTest(),
   ];
   int indexWidget = 0;
   @override
@@ -83,7 +85,7 @@ class _RiderServiceState extends State<RiderService> {
     return ListTile(
       onTap: () {
         setState(() {
-          indexWidget = 1;
+          indexWidget = 6;
           Navigator.pop(context);
         });
       },
