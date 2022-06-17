@@ -86,63 +86,84 @@ class _showCallRidderNoneAcceptState extends State<showCallRidderNoneAccept> {
   ListView buildListView(BoxConstraints constraints) {
     return ListView.builder(
       itemCount: callridernotacceptModel.length,
-      itemBuilder: (context, index) => Card(
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(4),
-              width: constraints.maxWidth * 0.3 - 4,
-              height: constraints.maxWidth * 0.3,
-              child: CircleAvatar(
-                radius: 100,
-                backgroundColor: MyConstant.dark,
-                child: const Text('ລຳດັບທີ'),
+      itemBuilder: (context, index) => Container(
+        margin: EdgeInsets.all(5),
+        child: Card(
+          color: Color(0xFFe8e8e8),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.3 - 4,
+                height: constraints.maxWidth * 0.3,
+                child: Container(
+                  decoration: new BoxDecoration(
+                    color: MyConstant.primary,
+                    borderRadius: new BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: const Text(
+                      'SCN RIDER',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.all(4),
-              width: constraints.maxWidth * 0.7 - 4,
-              height: constraints.maxWidth * 0.3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShowTitle(
-                      title:
-                          'ເລກບິນ: ${callridernotacceptModel[index].bill_header}',
-                      textStyle: MyConstant().h2Style()),
-                  ShowTitle(
-                      title:
-                          'ລາຄາລວມ ${callridernotacceptModel[index].bill_total.toString()} ກີບ',
-                      textStyle: MyConstant().h3Style()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            print(
-                                'click show list = ${callridernotacceptModel[index].bill_header}');
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ListCalltruckNoAccept(
-                                    callRidderNotAcceptModel:
-                                        callridernotacceptModel[index],
-                                  ),
-                                ));
-                          },
-                          icon: Icon(
-                            Icons.moped_outlined,
-                            size: 36,
-                            color: MyConstant.dark,
-                          )),
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.7 - 14,
+                height: constraints.maxWidth * 0.3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ເລກບິນ: ${callridernotacceptModel[index].bill_header}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ລາຄາລວມ: ${callridernotacceptModel[index].bill_total.toString()} ກີບ',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListCalltruckNoAccept(
+                                      callRidderNotAcceptModel:
+                                          callridernotacceptModel[index],
+                                    ),
+                                  ));
+                            },
+                            icon: Icon(
+                              Icons.moped_outlined,
+                              size: 36,
+                              color: MyConstant.primary,
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

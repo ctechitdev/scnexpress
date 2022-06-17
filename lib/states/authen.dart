@@ -229,14 +229,15 @@ class _AuthenState extends State<Authen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-            margin: EdgeInsets.only(top: size * 0.1),
-            width: size * 0.6,
-            child: CircleAvatar(
-              radius: 100,
-              backgroundImage:
-                  NetworkImage('http://149.129.55.90/scnexpress.jpg'),
-              backgroundColor: Colors.transparent,
-            )),
+          margin: EdgeInsets.only(top: size * 0.1),
+          width: size * 0.6,
+          child: CircleAvatar(
+            radius: 100,
+            backgroundImage:
+                NetworkImage('http://149.129.55.90/scnexpress.jpg'),
+            backgroundColor: Colors.transparent,
+          ),
+        ),
       ],
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:scnexpress/bodys/Show_payment.dart';
 import 'package:scnexpress/bodys/map_calltruck.dart';
@@ -36,24 +38,33 @@ class _RiderServiceState extends State<RiderService> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SCN Ridder'),
+        title: Text(
+          'SCN RIDER',
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
       ),
       drawer: Drawer(
-        child: Stack(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
           children: [
-            buildSignOut(),
-            Column(
-              children: [
-                UserAccountsDrawerHeader(accountName: null, accountEmail: null),
-                requestCallRidder(),
-                requestCallRidderAccept(),
-                paymentCallridder(),
-                callItemTohome(),
-                checkItemCalltoHome(),
-                payCallitemRidder(),
-                printBill(),
-              ],
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xFFFF6F00),
+                image: const DecorationImage(
+                  image: NetworkImage('http://149.129.55.90/scnexpress.jpg'),
+                ),
+              ),
+              child: Text(''),
             ),
+            requestCallRidder(),
+            requestCallRidderAccept(),
+            paymentCallridder(),
+            callItemTohome(),
+            checkItemCalltoHome(),
+            payCallitemRidder(),
+            printBill(),
+            buildSignOut(),
           ],
         ),
       ),
@@ -85,7 +96,7 @@ class _RiderServiceState extends State<RiderService> {
     return ListTile(
       onTap: () {
         setState(() {
-          indexWidget = 6;
+          indexWidget = 1;
           Navigator.pop(context);
         });
       },
@@ -196,6 +207,31 @@ class _RiderServiceState extends State<RiderService> {
       ),
       subtitle: ShowTitle(
         title: 'ພິນບິນເອີ້ນລົດ ແລະ ສົ່ງສິນຄ້າ',
+        textStyle: MyConstant().h3Style(),
+      ),
+    );
+  }
+
+  ListTile logOut() {
+    return ListTile(
+      onTap: () {
+        {
+          SharedPreferences preferences =
+              SharedPreferences.getInstance() as SharedPreferences;
+          preferences.clear().then(
+                (value) => Navigator.pushNamedAndRemoveUntil(
+                    context, MyConstant.routeAuth, (route) => false),
+              );
+        }
+      },
+      tileColor: MyConstant.primary,
+      leading: Icon(Icons.local_print_shop_outlined),
+      title: ShowTitle(
+        title: 'ອອກລະບົບ',
+        textStyle: MyConstant().h2Style(),
+      ),
+      subtitle: ShowTitle(
+        title: 'ອອກລະບົບ',
         textStyle: MyConstant().h3Style(),
       ),
     );

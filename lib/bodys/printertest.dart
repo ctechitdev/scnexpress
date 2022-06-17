@@ -1,5 +1,6 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
+import 'package:scnexpress/function/printbill.dart';
 
 class printTest extends StatefulWidget {
   const printTest({Key? key}) : super(key: key);
@@ -12,12 +13,14 @@ class _printTestState extends State<printTest> {
   List<BluetoothDevice> devices = [];
   BluetoothDevice? selectedDevice;
   BlueThermalPrinter printer = BlueThermalPrinter.instance;
+  printBill? printCall;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getDevices();
+    printCall = printBill();
   }
 
   void getDevices() async {
@@ -38,12 +41,8 @@ class _printTestState extends State<printTest> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: () async {
-                if ((await printer.isConnected)!) {
-                  printer.printNewLine();
-                  printer.printCustom('ສະບາຍດີ ທົດລອງພິນ', 0, 1);
-                  printer.printQRcode('test QR', 200, 200, 1);
-                }
+              onPressed: () {
+                printnew();
               },
               child: Text('print'),
             )
@@ -51,5 +50,10 @@ class _printTestState extends State<printTest> {
         ),
       ),
     );
+  }
+
+  printnew() {
+    String billInvoice = "123";
+    printCall!.printInvoice(billInvoice);
   }
 }
