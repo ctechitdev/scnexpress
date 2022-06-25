@@ -1,11 +1,10 @@
 import 'dart:ui';
 
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
-import 'package:scnexpress/bodys/Show_payment.dart';
-import 'package:scnexpress/bodys/map_calltruck.dart';
+import 'package:scnexpress/bodys/capture.dart';
 import 'package:scnexpress/bodys/prepay_callitem.dart';
-import 'package:scnexpress/bodys/printertest.dart';
-import 'package:scnexpress/bodys/show_call_item.dart';
+import 'package:scnexpress/bodys/prinbill.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
 import 'package:scnexpress/bodys/show_callitem_accept.dart';
 import 'package:scnexpress/bodys/show_calltruck_accept.dart';
@@ -24,6 +23,7 @@ class RiderService extends StatefulWidget {
 }
 
 class _RiderServiceState extends State<RiderService> {
+  BlueThermalPrinter printer = BlueThermalPrinter.instance;
   List<Widget> widgets = [
     showCallRidderNoneAccept(),
     ShowAcceptCallItemRidder(),
@@ -31,7 +31,9 @@ class _RiderServiceState extends State<RiderService> {
     showListCallItemNoaccept(),
     showListCallItemAcepted(),
     prepaycallitempage(),
-    printTest(),
+    //printTest(),
+    //printBillPage(),
+    capTurepage(),
   ];
   int indexWidget = 0;
   @override
@@ -51,20 +53,27 @@ class _RiderServiceState extends State<RiderService> {
             const DrawerHeader(
               decoration: BoxDecoration(
                 color: Color(0xFFFF6F00),
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(80),
+                ),
                 image: const DecorationImage(
-                  image: NetworkImage('http://149.129.55.90/scnexpress.jpg'),
+                  image: NetworkImage(
+                      'http://149.129.55.90/appicon/scnexpress.png'),
                 ),
               ),
               child: Text(''),
             ),
-            requestCallRidder(),
-            requestCallRidderAccept(),
-            paymentCallridder(),
-            callItemTohome(),
-            checkItemCalltoHome(),
-            payCallitemRidder(),
-            printBill(),
-            buildSignOut(),
+
+            // 123
+
+            buildCalltruckNonAccept(),
+            buildCalltruckAccepted(),
+            buildPaymentCallTruck(),
+            buildCallItemNoAccept(),
+            buildCallItemAccepted(),
+            buildPaymentCallItem(),
+            buildPrintBill(),
+            buildLogout(),
           ],
         ),
       ),
@@ -72,197 +81,205 @@ class _RiderServiceState extends State<RiderService> {
     );
   }
 
-  ListTile requestCallRidder() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 0;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.moped_outlined),
-      title: ShowTitle(
-        title: 'ລາຍການເອີ້ນລົດ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ລາຍການເອີ້ນລົດທີ່ບໍ່ໄດ້ຮັບ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile requestCallRidderAccept() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 1;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.ballot_outlined),
-      title: ShowTitle(
-        title: 'ກວດສອບສິນຄ້າເອີ້ນລົດ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ກວດສອບລາຍລະອຽດບິນທີ່ເອີ້ນຮັບລົດ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile paymentCallridder() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 2;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.payments_outlined),
-      title: ShowTitle(
-        title: 'ຊຳລະເງິນສົດເອີ້ນລົດ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ຊຳລະຄ່າຂົນສົ່ງ ແລະ ບໍລິການຮັບເຄື່ອງ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile callItemTohome() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 3;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.account_balance_outlined),
-      title: ShowTitle(
-        title: 'ລາຍການສົ່ງສິນຄ້າ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ສະແດງລາຍການສົ່ງສິນຄ້າທີ່ບໍ່ໄດ້ກົດຮັບ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile checkItemCalltoHome() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 4;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.home_work_outlined),
-      title: ShowTitle(
-        title: 'ກວດຄ່າສົງສິນຄ້າຮອດບ້ານ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ສະແດງລາຍການຄ່າສົງສິນຄ້າຮອດບ້ານ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile payCallitemRidder() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 5;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.payments_sharp),
-      title: ShowTitle(
-        title: 'ຊຳລະເອີ້ນສິນຄ້າ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ສະແດງລາຍການຊຳລະເອີ້ນສິນຄ້າ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile printBill() {
-    return ListTile(
-      onTap: () {
-        setState(() {
-          indexWidget = 3;
-          Navigator.pop(context);
-        });
-      },
-      leading: Icon(Icons.local_print_shop_outlined),
-      title: ShowTitle(
-        title: 'ພິນບິນ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ພິນບິນເອີ້ນລົດ ແລະ ສົ່ງສິນຄ້າ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  ListTile logOut() {
-    return ListTile(
-      onTap: () {
-        {
-          SharedPreferences preferences =
-              SharedPreferences.getInstance() as SharedPreferences;
-          preferences.clear().then(
-                (value) => Navigator.pushNamedAndRemoveUntil(
-                    context, MyConstant.routeAuth, (route) => false),
-              );
-        }
-      },
-      tileColor: MyConstant.primary,
-      leading: Icon(Icons.local_print_shop_outlined),
-      title: ShowTitle(
-        title: 'ອອກລະບົບ',
-        textStyle: MyConstant().h2Style(),
-      ),
-      subtitle: ShowTitle(
-        title: 'ອອກລະບົບ',
-        textStyle: MyConstant().h3Style(),
-      ),
-    );
-  }
-
-  Column buildSignOut() {
+  Column buildCalltruckNonAccept() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        ListTile(
-          onTap: () async {
-            SharedPreferences preferences =
-                await SharedPreferences.getInstance();
-            preferences.clear().then(
-                  (value) => Navigator.pushNamedAndRemoveUntil(
-                      context, MyConstant.routeAuth, (route) => false),
-                );
-          },
-          tileColor: MyConstant.primary,
-          leading: Icon(
-            Icons.exit_to_app,
-            size: 36,
-            color: Colors.white,
+        Container(
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: NetworkImage(
+                  'http://149.129.55.90/appicon/listnoacceptcalltruck.jpeg'),
+            ),
           ),
-          title: ShowTitle(
-            title: 'ອອກລະບົບ',
-            textStyle: MyConstant().h2WhiteStyle(),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 0;
+                Navigator.pop(context);
+              });
+            },
           ),
-          subtitle: ShowTitle(
-            title: 'ອອກລະບົບ',
-            textStyle: MyConstant().h3WhiteStyle(),
+        ),
+      ],
+    );
+  }
+
+  Column buildCalltruckAccepted() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: NetworkImage(
+                  'http://149.129.55.90/appicon/listacceptcalltruck.jpeg'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 1;
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildPaymentCallTruck() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: NetworkImage(
+                  'http://149.129.55.90/appicon/paymentcalltruck.jpeg'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 2;
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildCallItemNoAccept() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: NetworkImage(
+                  'http://149.129.55.90/appicon/listnoacceptcallitem.jpeg'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 3;
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildCallItemAccepted() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: NetworkImage(
+                  'http://149.129.55.90/appicon/listacceptcallitem.jpeg'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 4;
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildPaymentCallItem() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: NetworkImage(
+                  'http://149.129.55.90/appicon/paymentcallitem.jpeg'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 5;
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildPrintBill() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image:
+                  NetworkImage('http://149.129.55.90/appicon/printbill.jpeg'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () {
+              setState(() {
+                indexWidget = 6;
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column buildLogout() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            color: Color(0xFFFF6F00),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(32),
+              topRight: Radius.circular(32),
+            ),
+            image: const DecorationImage(
+              image: NetworkImage('http://149.129.55.90/appicon/logout.png'),
+            ),
+          ),
+          child: ListTile(
+            onTap: () async {
+              printer.disconnect();
+              SharedPreferences preferences =
+                  await SharedPreferences.getInstance();
+              preferences.remove('token').then(
+                    (value) => Navigator.pushNamedAndRemoveUntil(
+                        context, MyConstant.routeAuth, (route) => false),
+                  );
+            },
           ),
         ),
       ],

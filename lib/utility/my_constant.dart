@@ -13,6 +13,7 @@ class MyConstant {
   static String routeStaffService = '/staffServie';
   static String routeMerchantService = '/merchantService';
   static String rountCheckRecieve = '/checkRecieve';
+  static String routPrinterConfig = '/configprinter';
 
   // Image
 
@@ -22,6 +23,8 @@ class MyConstant {
   static String image4 = 'images/image4.png';
   static String image5 = 'images/image5.png';
   static String imgicon = 'images/scnexpress.jpg';
+
+  static String scnlogo = 'images/scnexpress.jpg';
   //Color
 
   static Color primary = Color(0xFFFF6F00);

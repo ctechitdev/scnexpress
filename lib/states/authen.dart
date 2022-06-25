@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:scnexpress/models/user_model.dart';
@@ -22,6 +23,32 @@ class _AuthenState extends State<Authen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  BluetoothDevice? _device;
+  BlueThermalPrinter printer = BlueThermalPrinter.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDevices();
+  }
+
+  void getDevices() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? printername = preferences.getString('printer_name');
+    String? printeraddress = preferences.getString('printer_address');
+
+    // printer.disconnect();
+
+    print('printer Name => $printername');
+    print('printer address => $printeraddress');
+
+    _device = new BluetoothDevice(printername, printeraddress);
+    printer.connect(_device!);
+
+    print('connected: => $_device');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,8 +260,7 @@ class _AuthenState extends State<Authen> {
           width: size * 0.6,
           child: CircleAvatar(
             radius: 100,
-            backgroundImage:
-                NetworkImage('http://149.129.55.90/scnexpress.jpg'),
+            backgroundImage: AssetImage(MyConstant.scnlogo),
             backgroundColor: Colors.transparent,
           ),
         ),

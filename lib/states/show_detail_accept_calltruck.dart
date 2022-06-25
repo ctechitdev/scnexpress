@@ -179,50 +179,105 @@ class _ShowListCallItemForCheckState extends State<ShowListCallItemForCheck> {
     return ListView.builder(
       itemCount: listitemnoacceptModel.length,
       itemBuilder: (context, index) => Container(
-        padding: const EdgeInsets.all(8),
-        margin: EdgeInsets.all(4),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-            border: Border.all(width: 3, color: MyConstant.dark)),
-        child: Column(
-          children: [
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].bill_code}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].mtl_name}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].mtl_weight}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].mtl_size}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].mtl_am.toString()}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].mtl_total_price}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: '${listitemnoacceptModel[index].create_date}',
-                textStyle: MyConstant().h2Style()),
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CheckEditItemCallRider(
-                          listitemDetailModel: listitemnoacceptModel[index],
-                        ),
-                      )).then((value) => ShowlistItemCallforChecking());
-                },
-                icon: Icon(
-                  Icons.edit_outlined,
-                  size: 36,
-                  color: MyConstant.dark,
-                ))
-          ],
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+        ),
+        child: Card(
+          color: Color(0xFFe8e8e8),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.all(15),
+                width: constraints.maxWidth * 0.4 - 4,
+                height: constraints.maxWidth * 0.4,
+                child: Image(
+                  image: NetworkImage(
+                      'http://149.129.55.90/appicon/edit-item.jpeg'),
+                ),
+              ),
+              Container(
+                child: Column(
+                  children: [
+                    Text(
+                      'ເລກບິນ: ${listitemnoacceptModel[index].bill_code}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຊື່ສິນຄິນ: ${listitemnoacceptModel[index].mtl_name}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ນ້ຳໜັກ: ${listitemnoacceptModel[index].mtl_weight}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຂະໜາດ: ${listitemnoacceptModel[index].mtl_size}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຈຳນວນ: ${listitemnoacceptModel[index].mtl_am.toString()}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ລວມຕໍ່ລາຍການ: ${listitemnoacceptModel[index].mtl_total_price}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ວັນທີ: ${listitemnoacceptModel[index].create_date}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CheckEditItemCallRider(
+                                listitemDetailModel:
+                                    listitemnoacceptModel[index],
+                              ),
+                            )).then((value) => ShowlistItemCallforChecking());
+                      },
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        size: 36,
+                        color: MyConstant.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

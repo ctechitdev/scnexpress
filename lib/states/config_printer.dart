@@ -2,18 +2,19 @@ import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class printTest extends StatefulWidget {
-  const printTest({Key? key}) : super(key: key);
+class configPrinterPage extends StatefulWidget {
+  const configPrinterPage({Key? key}) : super(key: key);
 
   @override
-  State<printTest> createState() => _printTestState();
+  State<configPrinterPage> createState() => _configPrinterPageState();
 }
 
-class _printTestState extends State<printTest> {
+class _configPrinterPageState extends State<configPrinterPage> {
   List<BluetoothDevice> devices = [];
   BluetoothDevice? selectedDevice;
   BlueThermalPrinter printer = BlueThermalPrinter.instance;
   String? connected;
+
   @override
   void initState() {
     // TODO: implement initState

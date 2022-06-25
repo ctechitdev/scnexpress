@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scnexpress/states/authen.dart';
 import 'package:scnexpress/states/check_call_recieve.dart';
+import 'package:scnexpress/states/config_printer.dart';
 import 'package:scnexpress/states/create_account.dart';
 import 'package:scnexpress/states/merchant_service.dart';
 import 'package:scnexpress/states/rider_service.dart';
@@ -15,6 +16,7 @@ final Map<String, WidgetBuilder> map = {
   '/staffServie': (BuildContext context) => StaffService(),
   '/merchantService': (BuildContext context) => MerchantService(),
   '/checkRecieve': (BuildContext context) => checkRecieve(),
+  '/configprinter': (BuildContext context) => configPrinterPage(),
 };
 
 String? initialRoute;
@@ -23,13 +25,20 @@ Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String? token = preferences.getString('token');
-  print('data is : $token');
+  String? printername = preferences.getString('printer_name');
+  String? printeraddress = preferences.getString('printer_address');
 
-  if (token?.isEmpty ?? true) {
-    initialRoute = MyConstant.routeAuth;
+  print('printer name  $printername');
+  print('printer address  $printername');
+
+  if (printername?.isEmpty ?? true) {
+    initialRoute = MyConstant.routPrinterConfig;
+    runApp(MyApp());
+  } else if (printername?.isEmpty ?? true) {
+    initialRoute = MyConstant.routeRiderService;
     runApp(MyApp());
   } else {
-    initialRoute = MyConstant.routeRiderService;
+    initialRoute = MyConstant.routeAuth;
     runApp(MyApp());
   }
 }

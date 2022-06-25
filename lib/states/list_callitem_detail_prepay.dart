@@ -105,50 +105,98 @@ class _listCallItemDetailPrepayState extends State<listCallItemDetailPrepay> {
     return ListView.builder(
       itemCount: arrayIemCallDetailListModel.length,
       itemBuilder: (context, index) => Container(
-          padding: const EdgeInsets.all(8),
-          margin: EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            border: Border.all(width: 3, color: MyConstant.dark),
-          ),
-          child: Column(
+        height: constraints.maxWidth * 0.7,
+        child: Card(
+          color: Color(0xFFe8e8e8),
+          child: Row(
             children: [
-              ShowTitle(
-                title:
-                    'ເລກສິນຄ້າ: ${arrayIemCallDetailListModel[index].bill_code}',
-                textStyle: MyConstant().h2Style(),
+              Container(
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.35,
+                height: constraints.maxWidth * 0.35,
+                child: Container(
+                  decoration: new BoxDecoration(
+                    color: MyConstant.primary,
+                    borderRadius: new BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'http://149.129.55.90/appicon/payment.jpeg'),
+                    ),
+                  ),
+                ),
               ),
-              ShowTitle(
-                title:
-                    'ຊື່ສິນຄ້າ: ${arrayIemCallDetailListModel[index].mtl_name}',
-                textStyle: MyConstant().h2Style(),
-              ),
-              ShowTitle(
-                title:
-                    'ນ້ຳໜັກ: ${arrayIemCallDetailListModel[index].mtl_weight}',
-                textStyle: MyConstant().h2Style(),
-              ),
-              ShowTitle(
-                title: 'ຂະໜາດ: ${arrayIemCallDetailListModel[index].mtl_size}',
-                textStyle: MyConstant().h2Style(),
-              ),
-              ShowTitle(
-                title:
-                    'ຈຳນວນ: ${arrayIemCallDetailListModel[index].mtl_am.toString()}',
-                textStyle: MyConstant().h2Style(),
-              ),
-              ShowTitle(
-                title:
-                    'ລາຄາ: ${arrayIemCallDetailListModel[index].mtl_total_price} ${arrayIemCallDetailListModel[index].ccy}',
-                textStyle: MyConstant().h2Style(),
-              ),
-              ShowTitle(
-                title:
-                    'ວັນທີລົງທະບຽນ: ${arrayIemCallDetailListModel[index].create_date}',
-                textStyle: MyConstant().h2Style(),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.7 - 26,
+                height: constraints.maxWidth * 0.6,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ເລກສິນຄ້າ: ${arrayIemCallDetailListModel[index].bill_code}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຊື່ສິນຄ້າ: ${arrayIemCallDetailListModel[index].mtl_name}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ນ້ຳໜັກ: ${arrayIemCallDetailListModel[index].mtl_weight}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຂະໜາດ: ${arrayIemCallDetailListModel[index].mtl_size}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຈຳນວນ: ${arrayIemCallDetailListModel[index].mtl_am.toString()}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ລາຄາ: ${arrayIemCallDetailListModel[index].mtl_total_price} ${arrayIemCallDetailListModel[index].ccy}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ວັນທີລົງທະບຽນ: ${arrayIemCallDetailListModel[index].create_date}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

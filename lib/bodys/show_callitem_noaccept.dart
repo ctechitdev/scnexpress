@@ -87,63 +87,86 @@ class _showListCallItemNoacceptState extends State<showListCallItemNoaccept> {
 
   ListView BuildListView(BoxConstraints constraints) => ListView.builder(
         itemCount: showlistcallitemnoacceptModel.length,
-        itemBuilder: (context, index) => Card(
-          child: Row(
-            children: [
-              Container(
+        itemBuilder: (context, index) => Container(
+          margin: EdgeInsets.all(5),
+          child: Card(
+            color: Color(0xFFe8e8e8),
+            child: Row(
+              children: [
+                Container(
                   padding: EdgeInsets.all(4),
                   width: constraints.maxWidth * 0.3 - 4,
                   height: constraints.maxWidth * 0.3,
-                  child: CircleAvatar(
-                      radius: 100,
-                      backgroundColor: MyConstant.dark,
-                      child: const Text('ເລກທີ'))),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.all(4),
-                width: constraints.maxWidth * 0.7 - 4,
-                height: constraints.maxWidth * 0.3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShowTitle(
-                      title:
-                          'ເລກບິນ :${showlistcallitemnoacceptModel[index].inv_id}',
-                      textStyle: MyConstant().h2Style(),
+                  child: Container(
+                    decoration: new BoxDecoration(
+                      color: MyConstant.primary,
+                      borderRadius: new BorderRadius.circular(10),
                     ),
-                    ShowTitle(
-                      title:
-                          'ເລກບິນ :${showlistcallitemnoacceptModel[index].inv_total.toString()}',
-                      textStyle: MyConstant().h2Style(),
+                    child: Center(
+                      child: const Text(
+                        'SCN RIDER',
+                        style: TextStyle(
+                          fontFamily: 'Notosan',
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFFFFFF),
+                        ),
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ListCallItemNoRidderAccept(
-                                    listcallitemnoacceptModel:
-                                        showlistcallitemnoacceptModel[index],
-                                  ),
-                                )).then((value) => showCallItemNoaccept());
-                          },
-                          icon: Icon(
-                            Icons.moped_outlined,
-                            size: 36,
-                            color: MyConstant.dark,
-                          ),
-                        )
-                      ],
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.all(4),
+                  width: constraints.maxWidth * 0.7 - 14,
+                  height: constraints.maxWidth * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'ເລກບິນ :${showlistcallitemnoacceptModel[index].inv_id}',
+                        style: TextStyle(
+                          fontFamily: 'Notosan',
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFF6F00),
+                        ),
+                      ),
+                      Text(
+                        'ເລກບິນ :${showlistcallitemnoacceptModel[index].inv_total.toString()}',
+                        style: TextStyle(
+                          fontFamily: 'Notosan',
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFF6F00),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ListCallItemNoRidderAccept(
+                                      listcallitemnoacceptModel:
+                                          showlistcallitemnoacceptModel[index],
+                                    ),
+                                  )).then((value) => showCallItemNoaccept());
+                            },
+                            icon: Icon(
+                              Icons.moped_outlined,
+                              size: 36,
+                              color: MyConstant.primary,
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

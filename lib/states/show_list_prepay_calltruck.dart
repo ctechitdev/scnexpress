@@ -124,44 +124,92 @@ class _ShowListDetailPrepayCallTruckState
   ListView buildListVIew(BoxConstraints constraints) {
     return ListView.builder(
       itemCount: listprepayModel.length,
-      itemBuilder: (context, index) => Container(
-        padding: const EdgeInsets.all(8),
-        margin: EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          border: Border.all(width: 3, color: MyConstant.dark),
-        ),
-        child: Column(
+      itemBuilder: (context, index) => Card(
+        color: Color(0xFFe8e8e8),
+        child: Row(
           children: [
-            //Text(listprepayModel[index].bill_code),
-            ShowTitle(
-              title: 'ເລກບິນທີ: ${listprepayModel[index].bill_code}',
-              textStyle: MyConstant().h2Style(),
+            Container(
+              padding: EdgeInsets.all(4),
+              width: constraints.maxWidth * 0.35,
+              height: constraints.maxWidth * 0.35,
+              child: Container(
+                decoration: new BoxDecoration(
+                  color: MyConstant.primary,
+                  borderRadius: new BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        'http://149.129.55.90/appicon/payment.jpeg'),
+                  ),
+                ),
+              ),
             ),
-            ShowTitle(
-              title: 'ຊື່ສິນຄ້າ: ${listprepayModel[index].mtl_name}',
-              textStyle: MyConstant().h2Style(),
-            ),
-            ShowTitle(
-              title: 'ນ້ຳໜັກ: ${listprepayModel[index].mtl_weight}',
-              textStyle: MyConstant().h2Style(),
-            ),
-            ShowTitle(
-              title: 'ຂະໜາດ: ${listprepayModel[index].mtl_size}',
-              textStyle: MyConstant().h2Style(),
-            ),
-            ShowTitle(
-              title: 'ຈຳນວນ: ${listprepayModel[index].mtl_am.toString()} ',
-              textStyle: MyConstant().h2Style(),
-            ),
-            ShowTitle(
-              title:
-                  'ລາຄາ: ${listprepayModel[index].mtl_total_price} ${listprepayModel[index].ccy}',
-              textStyle: MyConstant().h2Style(),
-            ),
-            ShowTitle(
-              title: 'ວັນລົງທະບຽນ: ${listprepayModel[index].create_date}',
-              textStyle: MyConstant().h2Style(),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.all(4),
+              width: constraints.maxWidth * 0.7 - 26,
+              height: constraints.maxWidth * 0.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ເລກບິນທີ: ${listprepayModel[index].bill_code}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                  Text(
+                    'ຊື່ສິນຄ້າ: ${listprepayModel[index].mtl_name}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                  Text(
+                    'ນ້ຳໜັກ: ${listprepayModel[index].mtl_weight}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                  Text(
+                    'ຂະໜາດ: ${listprepayModel[index].mtl_size}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                  Text(
+                    'ຈຳນວນ: ${listprepayModel[index].mtl_am.toString()}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                  Text(
+                    'ລາຄາ: ${listprepayModel[index].mtl_total_price} ${listprepayModel[index].ccy}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                  Text(
+                    'ວັນທີ່: ${listprepayModel[index].create_date}',
+                    style: TextStyle(
+                      fontFamily: 'Notosan',
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6F00),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -87,63 +87,87 @@ class _prepaycallitempageState extends State<prepaycallitempage> {
   ListView buildListView(BoxConstraints constraints) {
     return ListView.builder(
       itemCount: arraylistcallitemprepay.length,
-      itemBuilder: (context, index) => Card(
-        child: Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(4),
-              width: constraints.maxWidth * 0.3 - 4,
-              height: constraints.maxWidth * 0.3,
-              child: CircleAvatar(
-                radius: 100,
-                backgroundColor: MyConstant.dark,
-                child: Text('ລຳດັບທີ'),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              padding: EdgeInsets.all(4),
-              width: constraints.maxWidth * 0.7 - 4,
-              height: constraints.maxWidth * 0.3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ShowTitle(
-                      title:
-                          'ບິນເລກທີ: ${arraylistcallitemprepay[index].inv_id}',
-                      textStyle: MyConstant().h2Style()),
-                  ShowTitle(
-                      title:
-                          'ລາຄາ: ${arraylistcallitemprepay[index].inv_total.toString()}',
-                      textStyle: MyConstant().h2Style()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          listCallItemDetailPrepay(
-                                        invoiceParentID:
-                                            arraylistcallitemprepay[index],
-                                      ),
-                                    ))
-                                .then((value) => showlistCallItemPrepayment());
-                          },
-                          icon: Icon(
-                            Icons.moped_outlined,
-                            size: 36,
-                            color: MyConstant.dark,
-                          )),
-                    ],
+      itemBuilder: (context, index) => Container(
+        margin: EdgeInsets.all(5),
+        child: Card(
+          color: Color(0xFFe8e8e8),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.3 - 4,
+                height: constraints.maxWidth * 0.3,
+                child: Container(
+                  decoration: new BoxDecoration(
+                    color: MyConstant.primary,
+                    borderRadius: new BorderRadius.circular(10),
                   ),
-                ],
+                  child: Center(
+                    child: const Text(
+                      'SCN RIDER',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.7 - 14,
+                height: constraints.maxWidth * 0.3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ບິນເລກທີ: ${arraylistcallitemprepay[index].inv_id}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ລາຄາ: ${arraylistcallitemprepay[index].inv_total.toString()}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            listCallItemDetailPrepay(
+                                          invoiceParentID:
+                                              arraylistcallitemprepay[index],
+                                        ),
+                                      ))
+                                  .then(
+                                      (value) => showlistCallItemPrepayment());
+                            },
+                            icon: Icon(
+                              Icons.moped_outlined,
+                              size: 36,
+                              color: MyConstant.primary,
+                            )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

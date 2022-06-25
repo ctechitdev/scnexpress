@@ -240,12 +240,12 @@ class _ListCalltruckNoAcceptState extends State<ListCalltruckNoAccept> {
                   width: constraints.maxWidth * 0.4 - 4,
                   height: constraints.maxWidth * 0.4,
                   decoration: new BoxDecoration(
-                      color: MyConstant.primary,
-                      borderRadius: new BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image:
-                            NetworkImage('http://149.129.55.90/scnexpress.jpg'),
-                      )),
+                    borderRadius: new BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'http://149.129.55.90/appicon/list-calltruck.jpeg'),
+                    ),
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 10),

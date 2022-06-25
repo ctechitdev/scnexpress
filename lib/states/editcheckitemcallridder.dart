@@ -120,8 +120,11 @@ class _CheckEditItemCallRiderState extends State<CheckEditItemCallRider> {
           padding: const EdgeInsets.all(8),
           margin: EdgeInsets.all(4),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              border: Border.all(width: 3, color: MyConstant.dark)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(20.0),
+            ),
+            border: Border.all(width: 3, color: MyConstant.dark),
+          ),
           child: Form(
             key: formKey,
             child: Column(

@@ -180,36 +180,92 @@ class _ListCallItemNoRidderAcceptState
     return ListView.builder(
       itemCount: arrayCallItemList.length,
       itemBuilder: (context, index) => Container(
-        padding: EdgeInsets.all(4),
         margin: EdgeInsets.all(4),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20.0)),
-            border: Border.all(width: 3, color: MyConstant.dark)),
-        child: Column(
-          children: [
-            ShowTitle(
-                title: 'ເລກບິນ: ${arrayCallItemList[index].bill_code}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: 'ຊື່ສິນຄ້າ: ${arrayCallItemList[index].mtl_name}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: 'ນ້ຳໜັກ: ${arrayCallItemList[index].mtl_weight}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: 'ຂະຫນາດ: ${arrayCallItemList[index].mtl_size}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: 'ຈຳນວນ: ${arrayCallItemList[index].mtl_am.toString()} ',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title:
-                    'ລາຄາໃນບິນ: ${arrayCallItemList[index].mtl_total_price} ${arrayCallItemList[index].ccy}',
-                textStyle: MyConstant().h2Style()),
-            ShowTitle(
-                title: 'ວັນທີລົງທະບຽນ :${arrayCallItemList[index].create_date}',
-                textStyle: MyConstant().h2Style()),
-          ],
+        child: Card(
+          child: Row(
+            children: [
+              Container(
+                margin: EdgeInsets.all(5),
+                width: constraints.maxWidth * 0.4 - 4,
+                height: constraints.maxWidth * 0.4,
+                decoration: new BoxDecoration(
+                  borderRadius: new BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        'http://149.129.55.90/appicon/list-calltruck.jpeg'),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.all(4),
+                width: constraints.maxWidth * 0.7 - 58,
+                height: constraints.maxWidth * 0.6,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ເລກບິນ: ${arrayCallItemList[index].bill_code}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຊື່ສິນຄ້າ: ${arrayCallItemList[index].mtl_name}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ນ້ຳໜັກ: ${arrayCallItemList[index].mtl_weight}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຂະຫນາດ: ${arrayCallItemList[index].mtl_size}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ຈຳນວນ: ${arrayCallItemList[index].mtl_am.toString()}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ລາຄາໃນບິນ: ${arrayCallItemList[index].mtl_total_price} ${arrayCallItemList[index].ccy}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                    Text(
+                      'ວັນທີລົງທະບຽນ :${arrayCallItemList[index].create_date}',
+                      style: TextStyle(
+                        fontFamily: 'Notosan',
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6F00),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
