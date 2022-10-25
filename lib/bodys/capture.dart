@@ -19,8 +19,8 @@ class _capTurepageState extends State<capTurepage> {
   String? pathImage;
   printBill? testprint;
 
-  ScreenshotController screenshotControllerBranch = ScreenshotController();
-
+  ScreenshotController screenshotControllerImage = ScreenshotController();
+  ScreenshotController screenshotControllerDestiny = ScreenshotController();
   @override
   void initState() {
     // TODO: implement initState
@@ -71,32 +71,21 @@ class _capTurepageState extends State<capTurepage> {
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 
-  getTextImageSingle(
-      String text, Alignment alignment, ScreenshotController controller) {
+  getTextImageSingle(ScreenshotController controller) {
     return Container(
       color: Colors.white,
-      width: 190,
       child: new Center(
         child: Screenshot(
           controller: controller,
           child: Container(
-            color: Colors.white,
-            alignment: alignment, //Alignment.centerLeft,
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  child: Image(
-                    image: NetworkImage(
-                        'http://149.129.55.90/appicon/scnexpress.jpg'),
-                  ),
-                ),
-                Text(
-                  text,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ],
+            color: Colors.white, //Alignment.centerLeft,
+            child: Container(
+              width: 85,
+              height: 85,
+              child: Image(
+                image:
+                    NetworkImage('http://149.129.55.90/appicon/scnexpress.jpg'),
+              ),
             ),
           ),
         ),
@@ -104,52 +93,98 @@ class _capTurepageState extends State<capTurepage> {
     );
   }
 
+  getTextPointSendRecive(ScreenshotController controller) {
+    return Container(
+      color: Colors.white,
+      child: new Center(
+        child: Screenshot(
+          controller: controller,
+          child: Container(
+            color: Colors.white, //Alignment.centerLeft,
+            child: Container(
+              width: 85,
+              height: 85,
+              child: Image(
+                image:
+                    NetworkImage('http://149.129.55.90/appicon/scnexpress.jpg'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  createPrintTable() {
+    List<TableRow> rows = [];
+    for (var i = 0; i < 3; i++) {
+      rows.add(
+        TableRow(
+          children: [
+            Row(
+              children: [
+                Container(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Text(
+                          'ບິນເລກທີ ${i}',
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+    return rows;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text('widget.title'),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Screenshot(
-              controller: screenshotController,
-              child: Container(
-                  padding: const EdgeInsets.all(30.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent, width: 5.0),
-                    color: Colors.amberAccent,
-                  ),
-                  child: Column(
-                    children: [
-                      getTextImageSingle('ທົດລອງພິນ', Alignment.center,
-                          screenshotControllerBranch),
-                    ],
-                  )),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.blueAccent),
+                color: Colors.amberAccent,
+              ),
+              child: Column(
+                children: [
+                  getTextImageSingle(screenshotControllerImage),
+                ],
+              ),
             ),
             ElevatedButton(
               child: Text(
                 'Capture Above Widget',
               ),
               onPressed: () {
-                screenshotControllerBranch
+                screenshotControllerImage
                     .capture(delay: Duration(milliseconds: 10))
-                    .then((capturedImage) async {
-                  String dir = (await getApplicationDocumentsDirectory()).path;
-                  String filename =
-                      DateTime.now().microsecondsSinceEpoch.toString();
-                  writeToFileImage(capturedImage!, '$dir/$filename');
-                  print('path=> $dir/$filename');
-                  String picpath = '$dir/$filename';
+                    .then(
+                  (capturedImage) async {
+                    String dir =
+                        (await getApplicationDocumentsDirectory()).path;
+                    String filename =
+                        DateTime.now().microsecondsSinceEpoch.toString();
+                    writeToFileImage(capturedImage!, '$dir/$filename');
+                    print('path=> $dir/$filename');
+                    String picpath = '$dir/$filename';
 
-                  testprint!.printInvoice(picpath);
-                }).catchError((onError) {
-                  print(onError);
-                });
+                    testprint!.printInvoice(
+                      picpath,
+                    );
+                  },
+                );
               },
             ),
           ],

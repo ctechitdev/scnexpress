@@ -72,7 +72,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
   printnew() async {
     String dir = (await getApplicationDocumentsDirectory()).path;
 
-    testprint!.printInvoice(pathImage!);
+    // testprint!.printInvoice(pathImage!);
 
 //     if ((await printer.isConnected)!) {
 //       printer.printNewLine();
