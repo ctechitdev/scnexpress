@@ -13,7 +13,6 @@ class MyConstant {
   static String routeStaffService = '/staffServie';
   static String routeMerchantService = '/merchantService';
   static String rountCheckRecieve = '/checkRecieve';
-  static String routPrinterConfig = '/configprinter';
 
   // Image
 

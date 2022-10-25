@@ -1,16 +1,14 @@
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:scnexpress/function/printbill.dart';
 import 'package:scnexpress/models/listbill_detail_print_model.dart';
 import 'package:scnexpress/models/listbillprint_model.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sunmi_printer_plus/column_maker.dart';
+import 'package:sunmi_printer_plus/enums.dart';
+import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 class detailListBillPrint extends StatefulWidget {
   final billListSelectPrint billlistModel;
@@ -28,96 +26,41 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
   bool? haveData;
   List<listBillDetailPrintModel> arrayListDetailPrint = [];
 
-  List<BluetoothDevice> devices = [];
-  BluetoothDevice? selectedDevice;
-  BlueThermalPrinter printer = BlueThermalPrinter.instance;
-  String? pathImage;
-
-  printBill? testprint;
+  late PrinterStatus _printerStatus;
+  late PrinterMode _printerMode;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     refbilllistSelect = widget.billlistModel;
     showListbillDetailPrint();
-    initSavetoPath();
-    testprint = printBill();
+
+    _bindingPrinter().then((bool? isBind) async => {
+          if (isBind!)
+            {
+              _getPrinterStatus(),
+              _printerMode = await _getPrinterMode(),
+            }
+        });
   }
 
-  initSavetoPath() async {
-    //read and write
-    //image max 300px X 300px
-    final filename = 'yourlogo.png';
-    var bytes = await rootBundle.load('images/yourlogo.png');
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    writeToFile(bytes, '$dir/$filename');
+  /// must binding ur printer at first init in app
+  Future<bool?> _bindingPrinter() async {
+    final bool? result = await SunmiPrinter.bindingPrinter();
+    return result;
+  }
+
+  /// you can get printer status
+  Future<void> _getPrinterStatus() async {
+    final PrinterStatus result = await SunmiPrinter.getPrinterStatus();
     setState(() {
-      pathImage = '$dir/$filename';
+      _printerStatus = result;
     });
   }
 
-  Future<void> writeToFile(ByteData data, String path) {
-    final buffer = data.buffer;
-    return new File(path).writeAsBytes(
-        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-  }
-
-  Future<void> writeToFileImage(Uint8List data, String path) {
-    final buffer = data.buffer;
-    return new File(path).writeAsBytes(
-        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-  }
-
-  printnew() async {
-    String dir = (await getApplicationDocumentsDirectory()).path;
-
-    // testprint!.printInvoice(pathImage!);
-
-//     if ((await printer.isConnected)!) {
-//       printer.printNewLine();
-//       printer.printCustom("HEADER", 3, 1);
-//       printer.printNewLine();
-//       printer.printLeftRight("test", "test123", 0);
-//       printer.printImage(pathImage!);
-//       //path of your image/logo
-//       printer.printNewLine();
-// //      bluetooth.printImageBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-//       // printer.printLeftRight("LEFT", "RIGHT", 0);
-//       // printer.printLeftRight("LEFT", "RIGHT", 1);
-//       // printer.printLeftRight("LEFT", "RIGHT", 1, format: "%-15s %15s %n");
-//       // printer.printNewLine();
-//       // printer.printLeftRight("LEFT", "RIGHT", 2);
-//       // printer.printLeftRight("LEFT", "RIGHT", 3);
-//       // printer.printLeftRight("LEFT", "RIGHT", 4);
-//       // printer.printNewLine();
-//       // printer.print3Column("Col1", "Col2", "Col3", 1);
-//       // printer.print3Column("Col1", "Col2", "Col3", 1,
-//       //     format: "%-10s %10s %10s %n");
-//       // printer.printNewLine();
-//       // printer.print4Column("Col1", "Col2", "Col3", "Col4", 1);
-//       // printer.print4Column("Col1", "Col2", "Col3", "Col4", 1,
-//       //     format: "%-8s %7s %7s %7s %n");
-//       // printer.printNewLine();
-//       // String testString = " čĆžŽšŠ-H-ščđ";
-//       // printer.printCustom(testString, 1, 1, charset: "windows-1250");
-//       // printer.printLeftRight("Številka:", "18000001", 1,
-//       //     charset: "windows-1250");
-//       // printer.printCustom("Body left", 1, 0);
-//       // printer.printCustom("Body right", 0, 2);
-//       // printer.printNewLine();
-//       // String testString = " čĆžŽšŠ-H-ščđ";
-//       // printer.printCustom(testString, 1, 1, charset: "windows-1250");
-
-//       // printer.printLeftRight("Številka:", "18000001", 1,
-//       //     charset: "windows-1250");
-
-//       // printer.printNewLine();
-//       // printer.printQRcode("Insert Your Own Text to Generate", 200, 200, 1);
-//       // printer.printNewLine();
-//       // printer.printNewLine();
-//       // printer.paperCut();
-//     }
+  Future<PrinterMode> _getPrinterMode() async {
+    final PrinterMode mode = await SunmiPrinter.getPrinterMode();
+    return mode;
   }
 
   Future<Null> showListbillDetailPrint() async {
@@ -174,8 +117,97 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
               ),
             ),
             ElevatedButton(
-                onPressed: () {
-                  printnew();
+                onPressed: () async {
+                  await SunmiPrinter.initPrinter();
+
+                  await SunmiPrinter.startTransactionPrint(true);
+                  await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+                  await SunmiPrinter.line();
+                  await SunmiPrinter.printText('ທົດລອງພາສາລາວ');
+                  await SunmiPrinter.printText('ພະລັງນຳໃຊ້ໃຈດຳ');
+                  await SunmiPrinter.line();
+
+                  await SunmiPrinter.printRow(cols: [
+                    ColumnMaker(
+                        text: 'Name', width: 12, align: SunmiPrintAlign.LEFT),
+                    ColumnMaker(
+                        text: 'Qty', width: 6, align: SunmiPrintAlign.CENTER),
+                    ColumnMaker(
+                        text: 'UN', width: 6, align: SunmiPrintAlign.RIGHT),
+                    ColumnMaker(
+                        text: 'TOT', width: 6, align: SunmiPrintAlign.RIGHT),
+                  ]);
+
+                  await SunmiPrinter.printRow(cols: [
+                    ColumnMaker(
+                        text: 'Fries', width: 12, align: SunmiPrintAlign.LEFT),
+                    ColumnMaker(
+                        text: '4x', width: 6, align: SunmiPrintAlign.CENTER),
+                    ColumnMaker(
+                        text: '3.00', width: 6, align: SunmiPrintAlign.RIGHT),
+                    ColumnMaker(
+                        text: '12.00', width: 6, align: SunmiPrintAlign.RIGHT),
+                  ]);
+
+                  await SunmiPrinter.printRow(cols: [
+                    ColumnMaker(
+                        text: 'Strawberry',
+                        width: 12,
+                        align: SunmiPrintAlign.LEFT),
+                    ColumnMaker(
+                        text: '1x', width: 6, align: SunmiPrintAlign.CENTER),
+                    ColumnMaker(
+                        text: '24.44', width: 6, align: SunmiPrintAlign.RIGHT),
+                    ColumnMaker(
+                        text: '24.44', width: 6, align: SunmiPrintAlign.RIGHT),
+                  ]);
+
+                  await SunmiPrinter.printRow(cols: [
+                    ColumnMaker(
+                        text: 'Soda', width: 12, align: SunmiPrintAlign.LEFT),
+                    ColumnMaker(
+                        text: '1x', width: 6, align: SunmiPrintAlign.CENTER),
+                    ColumnMaker(
+                        text: '1.99', width: 6, align: SunmiPrintAlign.RIGHT),
+                    ColumnMaker(
+                        text: '1.99', width: 6, align: SunmiPrintAlign.RIGHT),
+                  ]);
+
+                  await SunmiPrinter.line();
+                  await SunmiPrinter.printRow(cols: [
+                    ColumnMaker(
+                        text: 'TOTAL', width: 25, align: SunmiPrintAlign.LEFT),
+                    ColumnMaker(
+                        text: '38.43', width: 5, align: SunmiPrintAlign.RIGHT),
+                  ]);
+
+                  await SunmiPrinter.printRow(cols: [
+                    ColumnMaker(
+                        text: 'ທົດລອງ', width: 15, align: SunmiPrintAlign.LEFT),
+                    ColumnMaker(
+                        text: 'ຈຳນວນ', width: 15, align: SunmiPrintAlign.LEFT),
+                  ]);
+
+                  String url = 'http://www.scngroup.la/appicon/test-pic2.jpg';
+                  // convert image to Uint8List format
+                  Uint8List byte =
+                      (await NetworkAssetBundle(Uri.parse(url)).load(url))
+                          .buffer
+                          .asUint8List();
+                  await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+                  await SunmiPrinter.startTransactionPrint(true);
+                  await SunmiPrinter.printImage(byte);
+                  await SunmiPrinter.lineWrap(2);
+
+                  await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+                  await SunmiPrinter.line();
+                  await SunmiPrinter.bold();
+                  await SunmiPrinter.printText('Transaction\'s Qrcode');
+                  await SunmiPrinter.resetBold();
+                  await SunmiPrinter.printQRCode(
+                      'https://github.com/brasizza/sunmi_printer');
+                  await SunmiPrinter.lineWrap(2);
+                  await SunmiPrinter.exitTransactionPrint(true);
                 },
                 child: Text('ພິນບິນ'))
           ],

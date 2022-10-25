@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:scnexpress/models/user_model.dart';
-import 'package:scnexpress/utility/my_api.dart';
 import 'package:scnexpress/utility/my_constant.dart';
 import 'package:scnexpress/utility/my_dialog.dart';
 import 'package:scnexpress/widgets/Show_title.dart';
-import 'package:scnexpress/widgets/show_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Authen extends StatefulWidget {
@@ -24,9 +21,6 @@ class _AuthenState extends State<Authen> {
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  BluetoothDevice? _device;
-  BlueThermalPrinter printer = BlueThermalPrinter.instance;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -36,18 +30,6 @@ class _AuthenState extends State<Authen> {
 
   void getDevices() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? printername = preferences.getString('printer_name');
-    String? printeraddress = preferences.getString('printer_address');
-
-    // printer.disconnect();
-
-    print('printer Name => $printername');
-    print('printer address => $printeraddress');
-
-    _device = new BluetoothDevice(printername, printeraddress);
-    printer.connect(_device!);
-
-    print('connected: => $_device');
   }
 
   @override
@@ -107,7 +89,6 @@ class _AuthenState extends State<Authen> {
                 String user = userController.text;
                 String password = passwordController.text;
 
-                print('user: is $user , password = $password');
                 checkAuthen(user: user, password: password);
               }
             },
@@ -123,8 +104,6 @@ class _AuthenState extends State<Authen> {
       "loginuser": "$user",
       "logpassword": "$password"
     }).then((value) async {
-      print('print values API ==> $value');
-
       if (value.toString() == 'ບໍ່ມີຜູ້ໃຊ້' ||
           value.toString() == 'ລະຫັດຜ່ານບໍ່ຖືກ') {
         MyDialog()
