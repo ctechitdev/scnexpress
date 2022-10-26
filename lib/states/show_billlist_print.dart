@@ -118,96 +118,96 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
             ),
             ElevatedButton(
                 onPressed: () async {
-                  await SunmiPrinter.initPrinter();
+                  // await SunmiPrinter.initPrinter();
 
-                  await SunmiPrinter.startTransactionPrint(true);
-                  await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-                  await SunmiPrinter.line();
-                  await SunmiPrinter.printText('ທົດລອງພາສາລາວ');
-                  await SunmiPrinter.printText('ພະລັງນຳໃຊ້ໃຈດຳ');
-                  await SunmiPrinter.line();
+                  // await SunmiPrinter.startTransactionPrint(true);
+                  // await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+                  // await SunmiPrinter.line();
+                  // await SunmiPrinter.printText('ທົດລອງພາສາລາວ');
+                  // await SunmiPrinter.printText('ພະລັງນຳໃຊ້ໃຈດຳ');
+                  // await SunmiPrinter.line();
 
-                  await SunmiPrinter.printRow(cols: [
-                    ColumnMaker(
-                        text: 'Name', width: 12, align: SunmiPrintAlign.LEFT),
-                    ColumnMaker(
-                        text: 'Qty', width: 6, align: SunmiPrintAlign.CENTER),
-                    ColumnMaker(
-                        text: 'UN', width: 6, align: SunmiPrintAlign.RIGHT),
-                    ColumnMaker(
-                        text: 'TOT', width: 6, align: SunmiPrintAlign.RIGHT),
-                  ]);
+                  // await SunmiPrinter.printRow(cols: [
+                  //   ColumnMaker(
+                  //       text: 'Name', width: 12, align: SunmiPrintAlign.LEFT),
+                  //   ColumnMaker(
+                  //       text: 'Qty', width: 6, align: SunmiPrintAlign.CENTER),
+                  //   ColumnMaker(
+                  //       text: 'UN', width: 6, align: SunmiPrintAlign.RIGHT),
+                  //   ColumnMaker(
+                  //       text: 'TOT', width: 6, align: SunmiPrintAlign.RIGHT),
+                  // ]);
 
-                  await SunmiPrinter.printRow(cols: [
-                    ColumnMaker(
-                        text: 'Fries', width: 12, align: SunmiPrintAlign.LEFT),
-                    ColumnMaker(
-                        text: '4x', width: 6, align: SunmiPrintAlign.CENTER),
-                    ColumnMaker(
-                        text: '3.00', width: 6, align: SunmiPrintAlign.RIGHT),
-                    ColumnMaker(
-                        text: '12.00', width: 6, align: SunmiPrintAlign.RIGHT),
-                  ]);
+                  // await SunmiPrinter.printRow(cols: [
+                  //   ColumnMaker(
+                  //       text: 'Fries', width: 12, align: SunmiPrintAlign.LEFT),
+                  //   ColumnMaker(
+                  //       text: '4x', width: 6, align: SunmiPrintAlign.CENTER),
+                  //   ColumnMaker(
+                  //       text: '3.00', width: 6, align: SunmiPrintAlign.RIGHT),
+                  //   ColumnMaker(
+                  //       text: '12.00', width: 6, align: SunmiPrintAlign.RIGHT),
+                  // ]);
 
-                  await SunmiPrinter.printRow(cols: [
-                    ColumnMaker(
-                        text: 'Strawberry',
-                        width: 12,
-                        align: SunmiPrintAlign.LEFT),
-                    ColumnMaker(
-                        text: '1x', width: 6, align: SunmiPrintAlign.CENTER),
-                    ColumnMaker(
-                        text: '24.44', width: 6, align: SunmiPrintAlign.RIGHT),
-                    ColumnMaker(
-                        text: '24.44', width: 6, align: SunmiPrintAlign.RIGHT),
-                  ]);
+                  // await SunmiPrinter.printRow(cols: [
+                  //   ColumnMaker(
+                  //       text: 'Strawberry',
+                  //       width: 12,
+                  //       align: SunmiPrintAlign.LEFT),
+                  //   ColumnMaker(
+                  //       text: '1x', width: 6, align: SunmiPrintAlign.CENTER),
+                  //   ColumnMaker(
+                  //       text: '24.44', width: 6, align: SunmiPrintAlign.RIGHT),
+                  //   ColumnMaker(
+                  //       text: '24.44', width: 6, align: SunmiPrintAlign.RIGHT),
+                  // ]);
 
-                  await SunmiPrinter.printRow(cols: [
-                    ColumnMaker(
-                        text: 'Soda', width: 12, align: SunmiPrintAlign.LEFT),
-                    ColumnMaker(
-                        text: '1x', width: 6, align: SunmiPrintAlign.CENTER),
-                    ColumnMaker(
-                        text: '1.99', width: 6, align: SunmiPrintAlign.RIGHT),
-                    ColumnMaker(
-                        text: '1.99', width: 6, align: SunmiPrintAlign.RIGHT),
-                  ]);
+                  // await SunmiPrinter.printRow(cols: [
+                  //   ColumnMaker(
+                  //       text: 'Soda', width: 12, align: SunmiPrintAlign.LEFT),
+                  //   ColumnMaker(
+                  //       text: '1x', width: 6, align: SunmiPrintAlign.CENTER),
+                  //   ColumnMaker(
+                  //       text: '1.99', width: 6, align: SunmiPrintAlign.RIGHT),
+                  //   ColumnMaker(
+                  //       text: '1.99', width: 6, align: SunmiPrintAlign.RIGHT),
+                  // ]);
 
-                  await SunmiPrinter.line();
-                  await SunmiPrinter.printRow(cols: [
-                    ColumnMaker(
-                        text: 'TOTAL', width: 25, align: SunmiPrintAlign.LEFT),
-                    ColumnMaker(
-                        text: '38.43', width: 5, align: SunmiPrintAlign.RIGHT),
-                  ]);
+                  // await SunmiPrinter.line();
+                  // await SunmiPrinter.printRow(cols: [
+                  //   ColumnMaker(
+                  //       text: 'TOTAL', width: 25, align: SunmiPrintAlign.LEFT),
+                  //   ColumnMaker(
+                  //       text: '38.43', width: 5, align: SunmiPrintAlign.RIGHT),
+                  // ]);
 
-                  await SunmiPrinter.printRow(cols: [
-                    ColumnMaker(
-                        text: 'ທົດລອງ', width: 15, align: SunmiPrintAlign.LEFT),
-                    ColumnMaker(
-                        text: 'ຈຳນວນ', width: 15, align: SunmiPrintAlign.LEFT),
-                  ]);
+                  // await SunmiPrinter.printRow(cols: [
+                  //   ColumnMaker(
+                  //       text: 'ທົດລອງ', width: 15, align: SunmiPrintAlign.LEFT),
+                  //   ColumnMaker(
+                  //       text: 'ຈຳນວນ', width: 15, align: SunmiPrintAlign.LEFT),
+                  // ]);
 
-                  String url = 'http://www.scngroup.la/appicon/test-pic2.jpg';
-                  // convert image to Uint8List format
-                  Uint8List byte =
-                      (await NetworkAssetBundle(Uri.parse(url)).load(url))
-                          .buffer
-                          .asUint8List();
-                  await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-                  await SunmiPrinter.startTransactionPrint(true);
-                  await SunmiPrinter.printImage(byte);
-                  await SunmiPrinter.lineWrap(2);
+                  // String url = 'http://www.scngroup.la/appicon/test-pic2.jpg';
+                  // // convert image to Uint8List format
+                  // Uint8List byte =
+                  //     (await NetworkAssetBundle(Uri.parse(url)).load(url))
+                  //         .buffer
+                  //         .asUint8List();
+                  // await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+                  // await SunmiPrinter.startTransactionPrint(true);
+                  // await SunmiPrinter.printImage(byte);
+                  // await SunmiPrinter.lineWrap(2);
 
-                  await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-                  await SunmiPrinter.line();
-                  await SunmiPrinter.bold();
-                  await SunmiPrinter.printText('Transaction\'s Qrcode');
-                  await SunmiPrinter.resetBold();
-                  await SunmiPrinter.printQRCode(
-                      'https://github.com/brasizza/sunmi_printer');
-                  await SunmiPrinter.lineWrap(2);
-                  await SunmiPrinter.exitTransactionPrint(true);
+                  // await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
+                  // await SunmiPrinter.line();
+                  // await SunmiPrinter.bold();
+                  // await SunmiPrinter.printText('Transaction\'s Qrcode');
+                  // await SunmiPrinter.resetBold();
+                  // await SunmiPrinter.printQRCode(
+                  //     'https://github.com/brasizza/sunmi_printer');
+                  // await SunmiPrinter.lineWrap(2);
+                  // await SunmiPrinter.exitTransactionPrint(true);
                 },
                 child: Text('ພິນບິນ'))
           ],
@@ -258,7 +258,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                           width: constraints.maxWidth * 0.6,
                           height: constraints.maxWidth * 0.2,
                           child: Text(
-                            'ວັນທີ: 22-06-2022',
+                            'ວັນທີ: ${arrayListDetailPrint[index].add_date}',
                             style: TextStyle(
                               fontFamily: 'Notosan',
                               fontWeight: FontWeight.bold,
@@ -274,7 +274,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                     alignment: Alignment.center,
                     height: constraints.maxWidth * 0.2,
                     child: Text(
-                      'ເລກບິນ: SCNL-012345678',
+                      'ເລກບິນ: ${arrayListDetailPrint[index].bill_code}',
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -323,10 +323,14 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('ຊື່ຜຸ້ສົ່ງ: ທົດລອງ'),
-                                    Text('ເບີໂທ: 123456'),
-                                    Text('ທີ່ຢູ່ຜູ້ສົ່ງ: ດອນກອຍ'),
-                                    Text('ເບີໂທສາຂາ: 654321'),
+                                    Text(
+                                        'ຊື່ຜຸ້ສົ່ງ: ${arrayListDetailPrint[index].mtl_cusdeposit_fname}'),
+                                    Text(
+                                        'ເບີໂທ: ${arrayListDetailPrint[index].mobi_cusdeposit_number}'),
+                                    Text(
+                                        'ທີ່ຢູ່ຜູ້ສົ່ງ: ${arrayListDetailPrint[index].origin_branch_name}'),
+                                    Text(
+                                        'ເບີໂທສາຂາ: ${arrayListDetailPrint[index].origin_branch_tel}'),
                                   ],
                                 ),
                               ),
@@ -374,10 +378,14 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('ຊື່ຜຸ້ຮັບ: ທົດລອງ'),
-                                    Text('ເບີໂທ: 123456'),
-                                    Text('ທີ່ຢູ່ຜູ້ຮັບ: ຫ້ວຍຫົງ'),
-                                    Text('ເບີໂທສາຂາ: 654321'),
+                                    Text(
+                                        'ຊື່ຜຸ້ຮັບ: ${arrayListDetailPrint[index].mtl_recipient_name}'),
+                                    Text(
+                                        'ເບີໂທ: ${arrayListDetailPrint[index].mtl_recipient_tel}'),
+                                    Text(
+                                        'ທີ່ຢູ່ຜູ້ຮັບ: ${arrayListDetailPrint[index].destination_branch_name}'),
+                                    Text(
+                                        'ເບີໂທສາຂາ: ${arrayListDetailPrint[index].destination_branch_tel}'),
                                   ],
                                 ),
                               ),
@@ -394,7 +402,9 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                         Container(
                           child: Text('ພັດສະດຸ'),
                         ),
-                        Container(child: Text('ຊື່ພັດສະດຸ')),
+                        Container(
+                            child: Text(
+                                '${arrayListDetailPrint[index].mtl_name}')),
                       ],
                     ),
                   ),
@@ -407,7 +417,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                           child: Column(
                             children: [
                               Text('ຈຳນວນ'),
-                              Text('5'),
+                              Text('${arrayListDetailPrint[index].mtl_am}'),
                             ],
                           ),
                         ),
@@ -416,8 +426,8 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                           height: constraints.maxWidth * 0.15,
                           child: Column(
                             children: [
-                              Text('ຂະໜາດ'),
-                              Text('5kg/55cm'),
+                              Text('ປະເພດ'),
+                              Text('${arrayListDetailPrint[index].mt_name}'),
                             ],
                           ),
                         ),
@@ -433,7 +443,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                           child: Column(
                             children: [
                               Text('ຈ່າຍຕົ້ນທາງ'),
-                              Text('50.000'),
+                              Text('${arrayListDetailPrint[index].from_pay}'),
                             ],
                           ),
                         ),
@@ -443,7 +453,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                           child: Column(
                             children: [
                               Text('ຈ່າຍປາຍທາງ'),
-                              Text('0'),
+                              Text('${arrayListDetailPrint[index].to_pay}'),
                             ],
                           ),
                         ),
@@ -474,12 +484,12 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
                           width: constraints.maxWidth * 0.5,
                           height: constraints.maxWidth * 0.15,
                           child: Text(
-                            'ກຳລັງເຂົ້າສາງ',
+                            '${arrayListDetailPrint[index].tfs_name}',
                             style: TextStyle(
                               fontFamily: 'Notosan',
                               fontWeight: FontWeight.bold,
                               color: MyConstant.dark,
-                              fontSize: 23,
+                              fontSize: 20,
                             ),
                           ),
                         ),
