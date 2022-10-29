@@ -1,8 +1,8 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:scnexpress/bodys/capture.dart';
 import 'package:scnexpress/bodys/prepay_callitem.dart';
 import 'package:scnexpress/bodys/prinbill.dart';
-import 'package:scnexpress/bodys/print_test.dart';
+import 'package:scnexpress/bodys/screen_cap.dart';
 import 'package:scnexpress/bodys/show_call_ridder_none_accept.dart';
 import 'package:scnexpress/bodys/show_callitem_accept.dart';
 import 'package:scnexpress/bodys/show_calltruck_accept.dart';
@@ -27,7 +27,9 @@ class _RiderServiceState extends State<RiderService> {
     showListCallItemAcepted(),
     prepaycallitempage(),
     //printTest(),
-    printBillPage(),
+    // printBillPage(),
+    //capTurepage(),
+    screenCapture(),
   ];
   int indexWidget = 0;
   @override
@@ -51,8 +53,7 @@ class _RiderServiceState extends State<RiderService> {
                   bottomRight: Radius.circular(80),
                 ),
                 image: const DecorationImage(
-                  image: NetworkImage(
-                      'http://149.129.55.90/appicon/scnexpress.png'),
+                  image: AssetImage('images/appicon/scnexpress.png'),
                 ),
               ),
               child: Text(''),
@@ -82,8 +83,7 @@ class _RiderServiceState extends State<RiderService> {
         Container(
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(
-                  'http://149.129.55.90/appicon/listnoacceptcalltruck.jpeg'),
+              image: AssetImage('images/appicon/listnoacceptcalltruck.jpeg'),
             ),
           ),
           child: ListTile(
@@ -106,8 +106,7 @@ class _RiderServiceState extends State<RiderService> {
         Container(
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(
-                  'http://149.129.55.90/appicon/listacceptcalltruck.jpeg'),
+              image: AssetImage('images/appicon/listacceptcalltruck.jpeg'),
             ),
           ),
           child: ListTile(
@@ -131,8 +130,7 @@ class _RiderServiceState extends State<RiderService> {
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(
-                  'http://149.129.55.90/appicon/paymentcalltruck.jpeg'),
+              image: AssetImage('images/appicon/paymentcalltruck.jpeg'),
             ),
           ),
           child: ListTile(
@@ -156,8 +154,7 @@ class _RiderServiceState extends State<RiderService> {
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(
-                  'http://149.129.55.90/appicon/listnoacceptcallitem.jpeg'),
+              image: AssetImage('images/appicon/listnoacceptcallitem.jpeg'),
             ),
           ),
           child: ListTile(
@@ -181,8 +178,7 @@ class _RiderServiceState extends State<RiderService> {
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(
-                  'http://149.129.55.90/appicon/listacceptcallitem.jpeg'),
+              image: AssetImage('images/appicon/listacceptcallitem.jpeg'),
             ),
           ),
           child: ListTile(
@@ -206,8 +202,7 @@ class _RiderServiceState extends State<RiderService> {
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image: NetworkImage(
-                  'http://149.129.55.90/appicon/paymentcallitem.jpeg'),
+              image: AssetImage('images/appicon/paymentcallitem.jpeg'),
             ),
           ),
           child: ListTile(
@@ -231,8 +226,7 @@ class _RiderServiceState extends State<RiderService> {
           margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             image: const DecorationImage(
-              image:
-                  NetworkImage('http://149.129.55.90/appicon/printbill.jpeg'),
+              image: AssetImage('images/appicon/printbill.jpeg'),
             ),
           ),
           child: ListTile(
@@ -261,7 +255,7 @@ class _RiderServiceState extends State<RiderService> {
               topRight: Radius.circular(32),
             ),
             image: const DecorationImage(
-              image: NetworkImage('http://149.129.55.90/appicon/logout.png'),
+              image: AssetImage('images/appicon/logout.png'),
             ),
           ),
           child: ListTile(

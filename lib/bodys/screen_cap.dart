@@ -1,28 +1,24 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scnexpress/models/listbill_detail_print_model.dart';
-import 'package:scnexpress/models/listbillprint_model.dart';
-import 'package:scnexpress/models/testBillprint_model.dart';
 import 'package:scnexpress/utility/my_constant.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sunmi_printer_plus/column_maker.dart';
 import 'package:sunmi_printer_plus/enums.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 import 'package:sunmi_printer_plus/sunmi_style.dart';
 
-class detailListBillPrint extends StatefulWidget {
-  final billListSelectPrint billlistModel;
-  const detailListBillPrint({Key? key, required this.billlistModel})
-      : super(key: key);
+class screenCapture extends StatefulWidget {
+  const screenCapture({Key? key}) : super(key: key);
 
   @override
-  State<detailListBillPrint> createState() => _detailListBillPrintState();
+  State<screenCapture> createState() => _screenCaptureState();
 }
 
-class _detailListBillPrintState extends State<detailListBillPrint> {
-  billListSelectPrint? refbilllistSelect;
+class _screenCaptureState extends State<screenCapture> {
+  ScreenshotController screenshotController = ScreenshotController();
 
   bool load = true;
   bool? haveData;
@@ -33,36 +29,9 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    refbilllistSelect = widget.billlistModel;
     showListbillDetailPrint();
-
-    _bindingPrinter().then((bool? isBind) async => {
-          if (isBind!)
-            {
-              _getPrinterStatus(),
-              _printerMode = await _getPrinterMode(),
-            }
-        });
-  }
-
-  /// must binding ur printer at first init in app
-  Future<bool?> _bindingPrinter() async {
-    final bool? result = await SunmiPrinter.bindingPrinter();
-    return result;
-  }
-
-  /// you can get printer status
-  Future<void> _getPrinterStatus() async {
-    final PrinterStatus result = await SunmiPrinter.getPrinterStatus();
-    setState(() {
-      _printerStatus = result;
-    });
-  }
-
-  Future<PrinterMode> _getPrinterMode() async {
-    final PrinterMode mode = await SunmiPrinter.getPrinterMode();
-    return mode;
   }
 
   Future<Null> showListbillDetailPrint() async {
@@ -71,7 +40,7 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
 
     Dio()
         .post('${MyConstant.urlapi}/listbillprint',
-            data: {"billheader": "${refbilllistSelect!.inv_id}"},
+            data: {"billheader": "SCNHBR-2207070001"},
             options: Options(headers: <String, String>{
               'authorization': 'Bearer $tokenrider'
             }))
@@ -97,113 +66,61 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ລາຍການບິນທີ່ຈະພິນ'),
-      ),
-      //${refbilllistSelect!.inv_id}
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'ຫົວບິນ: ${refbilllistSelect!.inv_id}',
-                textAlign: TextAlign.center,
-              ),
+      body: Column(
+        children: [
+          Screenshot(
+              child: Container(
+                  width: size,
+                  height: size,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: ListView.builder(
+                    itemCount: arrayListDetailPrint.length,
+                    itemBuilder: (context, index) =>
+                        Text(arrayListDetailPrint[index].bill_code),
+                  )),
+              controller: screenshotController),
+          ElevatedButton(
+            child: Text(
+              'Capture Above Widget',
             ),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) => buildListview(constraints),
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  printerData('${refbilllistSelect!.inv_id}');
-                },
-                child: Text('ພິນບິນ'))
-          ],
-        ),
+            onPressed: () {
+              screenshotController
+                  .capture(delay: Duration(milliseconds: 10))
+                  .then((capturedImage) async {
+                _bindingPrinter().then((bool? isBind) async => {
+                      if (isBind!)
+                        {
+                          _getPrinterStatus(),
+                          _printerMode = await _getPrinterMode(),
+                        }
+                    });
+
+                await SunmiPrinter.initPrinter();
+                await SunmiPrinter.startTransactionPrint(true);
+
+                await SunmiPrinter.printImage(capturedImage!);
+
+                await SunmiPrinter.resetFontSize();
+              }).catchError((onError) {
+                print(onError);
+              });
+            },
+          )
+        ],
       ),
     );
   }
-
-  final List<String> entries = <String>['A', 'B', 'C'];
-
-  printerData(String bill_header) async {
-    await SunmiPrinter.initPrinter();
-    await SunmiPrinter.startTransactionPrint(true);
-    String url = 'http://www.scngroup.la/appicon/test-pic2.jpg';
-    Uint8List byte = (await NetworkAssetBundle(Uri.parse(url)).load(url))
-        .buffer
-        .asUint8List();
-    await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-    await SunmiPrinter.startTransactionPrint(true);
-    await SunmiPrinter.printImage(byte);
-    await SunmiPrinter.lineWrap(2);
-    await SunmiPrinter.setCustomFontSize(35);
-
-    await SunmiPrinter.printText('ບິນຝາກເຄື່ອງ', style: SunmiStyle(bold: true));
-
-    await SunmiPrinter.lineWrap(1);
-    await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-
-    await SunmiPrinter.resetFontSize();
-
-    await SunmiPrinter.bold();
-    await SunmiPrinter.line();
-    for (var i = 0; i < arrayListDetailPrint.length; i++) {
-      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-
-      await SunmiPrinter.printText('${arrayListDetailPrint[i].bill_code}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-      await SunmiPrinter.printText('${arrayListDetailPrint[i].mtl_name}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.setCustomFontSize(20);
-
-      await SunmiPrinter.setAlignment(SunmiPrintAlign.LEFT);
-
-      await SunmiPrinter.printText(
-          'ຜູ້ຮັບ: ${arrayListDetailPrint[i].mtl_recipient_name}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.printText(
-          'ເບິໂທ: ${arrayListDetailPrint[i].mtl_recipient_tel}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.printText(
-          'ປາຍທາງ: ${arrayListDetailPrint[i].destination_branch_name}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.printText(
-          'ເບີສາຂາ: ${arrayListDetailPrint[i].destination_branch_tel}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.printText('ລາຄາ: ${arrayListDetailPrint[i].from_pay}',
-          style: SunmiStyle(bold: true));
-
-      await SunmiPrinter.line();
-
-      await SunmiPrinter.resetFontSize();
-    }
-    await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-    await SunmiPrinter.printText('ລວມ ', style: SunmiStyle(bold: true));
-    await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);
-    await SunmiPrinter.printText('260,000', style: SunmiStyle(bold: true));
-    await SunmiPrinter.lineWrap(2);
-    await SunmiPrinter.exitTransactionPrint(true);
-  }
-
-//arrayListDetailPrint[index].des_provin_name
 
   ListView buildListview(BoxConstraints constraints) {
     return ListView.builder(
       itemCount: arrayListDetailPrint.length,
       itemBuilder: (context, index) => Container(
+        // width: constraints.maxWidth,
+        // height: constraints.maxHeight,
         padding: EdgeInsets.all(4),
         child: Column(
           children: [
@@ -510,5 +427,24 @@ class _detailListBillPrintState extends State<detailListBillPrint> {
         ),
       ),
     );
+  }
+
+  /// you can get printer status
+  Future<void> _getPrinterStatus() async {
+    final PrinterStatus result = await SunmiPrinter.getPrinterStatus();
+    setState(() {
+      _printerStatus = result;
+    });
+  }
+
+  /// must binding ur printer at first init in app
+  Future<bool?> _bindingPrinter() async {
+    final bool? result = await SunmiPrinter.bindingPrinter();
+    return result;
+  }
+
+  Future<PrinterMode> _getPrinterMode() async {
+    final PrinterMode mode = await SunmiPrinter.getPrinterMode();
+    return mode;
   }
 }
